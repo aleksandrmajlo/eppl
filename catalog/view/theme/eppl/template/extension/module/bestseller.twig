@@ -1,0 +1,66 @@
+<section class="sPopularPosition section" id="sPopularPosition">
+  <div class="container">
+    <div class="section-title text-center">
+      <h2>{{ heading_title }}</h2>
+    </div>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-6 col-lg-3">
+                <div class="popularCategoryItem" >
+                    <a href="href="{{ product.href }}"">
+                      <picture class="lazy">
+                         <img src="#" data-src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                      </picture>
+                    </a>
+                    <div class="catalogItem__colors">
+
+                        {% if product.Colir_Array['color'] %}
+                            <div class="catalogItem__colorItem"
+                                 style="background-color: {{ product.Colir_Array['color'] }};"></div>
+                        {% endif %}
+
+
+                        {% if product.color_products %}
+                            {% for color_product in product.color_products %}
+                                <a class="catalogItem__colorItem" href="{{ color_product['href'] }}"
+                                   style="background-color: {{ color_product['color'] }};display: block;"></a>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                    <a href="{{ product.href }}" class="popularCategoryItem__title">{{ product.name }}</a>
+                    <div class="catalogItem__memoryWrap">
+                        {% if product.Colir_Array['array'] %}
+                            <a class="catalogItem__memory active"
+                               style="background-color: rgb(116 220 0);" onclick="return false;"
+                               href="#">{{ product.Colir_Array['array'] }}</a>
+                        {% endif %}
+                        {% if product.array_products %}
+                            {% for array_product in product.array_products %}
+                                <a class="catalogItem__memory active"
+                                   href="{{ array_product.href }}">{{ array_product['array'] }}</a>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% if product.price %}
+                            {% if not product.special %}
+                                <span class="popularCategoryItem__price"> {{ product.price }}</span>
+                            {% else %}
+                                <span class="popularCategoryItem__price">{{ product.special }}</span>
+                                <span class="price-old">{{ product.price }}</span>
+                            {% endif %}
+                            {% if product.tax %}
+                                <span class="popularCategoryItem__price">{{ text_tax }} {{ product.tax }}</span>
+                            {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a class="sPopularPosition__allCategory" href="#">
+      <span>Дивитися всі товари</span>
+    </a>
+  </div>
+</section>
+
+

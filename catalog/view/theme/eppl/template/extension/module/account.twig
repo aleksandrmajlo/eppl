@@ -1,0 +1,32 @@
+<div class="caption">
+    {% if not logged %}
+        <a class="caption__btn" data-route="'account/login'" href="{{ login }}"  >{{ text_login }}</a>
+        <a class="caption__btn" data-route="account/register" href="{{ register }}"  >{{ text_register }}</a>
+        <a class="caption__btn" data-route="account/forgotten" href="{{ forgotten }}"  >{{ text_forgotten }}</a>
+    {% endif %}
+    <a class="caption__btn" data-route='account/account' href="{{ account }}"  >{{ text_account }}</a>
+    {% if logged %}
+        <a class="caption__btn" data-route="account/edit" href="{{ edit }}"  >{{ text_edit }}</a>
+        <a class="caption__btn" data-route="account/password"  href="{{ password }}"  >{{ text_password }}</a>
+    {% endif %}
+    <a class="caption__btn" data-route="account/address" href="{{ address }}"  >{{ text_address }}</a>
+    <a class="caption__btn" data-route="account/wishlist" href="{{ wishlist }}"  >{{ text_wishlist }}</a>
+    <a class="caption__btn" data-route='account/order' href="{{ order }}"  >{{ text_order }}</a>
+    <a class="caption__btn" data-route="account/download" href="{{ download }}"   >{{ text_download }}</a>
+    <a class="caption__btn" data-route="account/recurring"        href="{{ recurring }}"  >{{ text_recurring }}</a>
+    <a class="caption__btn" data-route="account/reward" href="{{ reward }}"       >{{ text_reward }}</a>
+    <a class="caption__btn" data-route="account/return" href="{{ return }}"  >{{ text_return }}</a>
+    <a class="caption__btn" data-route="transaction" href="{{ transaction }}"           >{{ text_transaction }}</a>
+    <a class="caption__btn" data-route="account/newsletter" href="{{ newsletter }}"  >{{ text_newsletter }}</a>
+
+    {% if logged %}
+        <a class="caption__btn" data-route="account/logout" href="{{ logout }}"  >{{ text_logout }}</a>
+    {% endif %}
+</div>
+<script>
+   var   $route='{{ route }}';
+   $('.caption__btn').each(function () {
+       var route=$(this).data('route');
+       if(route==$route)$(this).addClass('active')
+   })
+</script>

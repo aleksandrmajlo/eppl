@@ -1,0 +1,40 @@
+{{ header }}
+<div class="pageHead pageHead pageHead--01">
+    <div class="pageHead__wrap">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <h1>{{ heading_title }}</h1>
+    </div>
+</div>
+<div class="sAboutUs section" id="sAboutUs">
+    <div id="information-information" class="container">
+        <div class="row">
+            {{ column_left }}
+            {% if column_left and column_right %}
+                {% set class = 'col-sm-6' %}
+            {% elseif column_left or column_right %}
+                {% set class = 'col-sm-9' %}
+            {% else %}
+                {% set class = 'col-sm-12' %}
+            {% endif %}
+            <div id="content" class="{{ class }}">
+                {{ content_top }}
+                {{ description }}
+            </div>
+            {{ column_right }}
+        </div>
+    </div>
+</div>
+{{ content_bottom }}
+{{ footer }}

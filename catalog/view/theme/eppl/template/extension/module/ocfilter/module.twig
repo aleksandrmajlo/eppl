@@ -1,0 +1,62 @@
+{% if options or show_price %}
+
+    <div class="sFilter" id="ocfilter">
+
+        <a class="sFilter__filterMob link-modal d-lg-none" href="#filter">Добавить фильтр
+            <svg class="icon icon-filter ">
+                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#filter"></use>
+            </svg>
+        </a>
+
+
+        <div class="hidden" id="ocfilter-button">
+            <button class="btn btn-primary disabled"
+                    data-loading-text="<i class='fa fa-refresh fa-spin'></i> Загрузка.."></button>
+        </div>
+        <div class="filter d-none d-lg-block">
+            <div id="filter">
+                {% include 'eppl/template/extension/module/ocfilter/selected_filter.twig' %}
+                {% include 'eppl/template/extension/module/ocfilter/filter_list.twig' %}
+                {% include 'eppl/template/extension/module/ocfilter/filter_price.twig' %}
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript"><!--
+        $(function () {
+            //$('body').append($('.ocfilter-mobile').remove().get(0).outerHTML);
+            var options = {
+                mobile: $('.ocfilter-mobile').is(':visible'),
+                php: {
+                    searchButton: {{ search_button ? 'true' : 'false' }},
+                    showPrice: {{ show_price ? 'true' : 'false' }},
+                    showCounter: {{ show_counter ? 'true' : 'false' }},
+                    manualPrice: {{ manual_price ? 'true' : 'false' }},
+                    link: '{{ link }}',
+                    path: '{{ path }}',
+                    params: '{{ params }}',
+                    index: '{{ index }}'
+                },
+                text: {
+                    show_all: '{{ text_show_all }}',
+                    hide: '{{ text_hide }}',
+                    load: '{{ text_load }}',
+                    any: '{{ text_any }}',
+                    select: '{{ button_select }}'
+                }
+            };
+            if (options.mobile) {
+                //$('.ocf-offcanvas-body').html($('#ocfilter').remove().get(0).outerHTML);
+            }
+            $('[data-toggle="offcanvas"]').on('click', function (e) {
+                $(this).toggleClass('active');
+                $('body').toggleClass('modal-open');
+                $('.ocfilter-mobile').toggleClass('active');
+            });
+            setTimeout(function () {
+                $('#ocfilter').ocfilter(options);
+            }, 1);
+
+        });
+        //-->
+    </script>
+{% endif %}

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Modification product_my</name>
+    <code>epproduct</code>
+    <version>1.0</version>
+    <author>OpenCart Ltd</author>
+    <link>http://www.opencart.com</link>
+
+
+    <file path="catalog/model/catalog/product.php">
+        <operation>
+            <search>
+                <![CDATA[$product_attribute_data = array();]]>
+            </search>
+            <add position="after">
+                <![CDATA[
+                if($product_attribute_group["attribute_group_id"]=="1"){
+                    continue;
+                 }
+	             ]]>
+            </add>
+        </operation>
+    </file>
+
+
+    <file path="catalog/model/catalog/product.php">
+        <operation>
+            <search>
+                <![CDATA[public function getTotalProductSpecials() {]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                 public function getMinMaxPrice($data = array(), $type)
+    {
+        $sql_form = "";
+        if (! empty($data['filter_category_id'])) {
+            if (! empty($data['filter_sub_category'])) {
+                $sql_form .= " FROM " . DB_PREFIX . "category_path cp LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (cp.category_id = p2c.category_id)";
+            } else {
+                $sql_form .= " FROM " . DB_PREFIX . "product_to_category p2c";
+            }
+
+            $sql_form .= " LEFT JOIN " . DB_PREFIX . "product p ON (p2c.product_id = p.product_id)";
+        } else {
+            $sql_form .= " FROM " . DB_PREFIX . "product p";
+        }
+
+        $sql_form .= " WHERE p.status = '1' AND p.date_available <= NOW()";
+        if (! empty($data['filter_category_id'])) {
+            if (! empty($data['filter_sub_category'])) {
+                $sql_form .= " AND cp.path_id = '" . (int) $data['filter_category_id'] . "'";
+            } else {
+                $sql_form .= " AND p2c.category_id = '" . (int) $data['filter_category_id'] . "'";
+            }
+        }
+
+        $sql = "";
+
+        if ($type == "max") {
+            $sql = "SELECT GREATEST( MAX(price), ( SELECT IFNULL(MAX(price),0) ";
+        }
+
+        if ($type == "min") {
+            $sql = "SELECT LEAST( MIN(price), ( SELECT IFNULL(MIN(price),9999999999)";
+        }
+
+        $sql .= "FROM  oc_product_special WHERE product_id IN (SELECT p.product_id ";
+        $sql .= $sql_form;
+        $sql .= ") ) ) as price";
+
+        $sql .= $sql_form;
+
+        $query = $this->db->query($sql);
+
+        return $query->row['price'];
+    }
+	             ]]>
+            </add>
+        </operation>
+    </file>
+
+
+
+
+
+    <file path="catalog/model/catalog/product.php">
+        <operation>
+            <search>
+                <![CDATA[public function getProductLayoutId($product_id) {]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+	public function getProductRelatedColor($product_id) {
+		$product_data = array();
+
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_related_color pr LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = '" . (int)$product_id . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'");
+
+		foreach ($query->rows as $result) {
+			$product_data[$result['related_id']] = $this->getProduct($result['related_id']);
+		}
+
+		return $product_data;
+	}
+	public function getProductRelatedArray($product_id) {
+		$product_data = array();
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_related_array pr LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = '" . (int)$product_id . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'");
+		foreach ($query->rows as $result) {
+			$product_data[$result['related_id']] = $this->getProduct($result['related_id']);
+		}
+
+		return $product_data;
+	}
+	             ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA[$data['products'] = array();]]>
+            </search>
+            <add position="after">
+                <![CDATA[
+
+           //**********************************************
+            $data['Colir_Array']=['colir'=>[],'array'=>[]];
+            $product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id = ag.attribute_group_id) LEFT JOIN " . DB_PREFIX . "attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$this->request->get['product_id'] . "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
+            foreach ($product_attribute_group_query->rows as $product_attribute_group) {
+                if($product_attribute_group["attribute_group_id"]=="1"){
+                    $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$product_attribute_group['attribute_group_id'] . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                    foreach ($product_attribute_query->rows as $product_attribute) {
+                        if($product_attribute['attribute_id']=="11"){
+                            $data['Colir_Array']['colir']=$product_attribute["text"];
+                        }
+                        if($product_attribute['attribute_id']=="12"){
+                            $data['Colir_Array']['array'][]=[
+                                'array'=>$product_attribute["text"],
+                                'href'=>false,
+                                "number"=>(int)$product_attribute["text"]
+                            ];
+
+                        }
+                    }
+                }
+            }
+
+            $results = $this->model_catalog_product->getProductRelatedColor($this->request->get['product_id']);
+            $data['color_products']=[];
+            foreach ($results as $result){
+                $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$result['product_id'] . "' AND a.attribute_group_id = '" . 1 . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                $color="";
+                foreach ($product_attribute_query->rows as $product_attribute) {
+                    if($product_attribute['attribute_id']=="11"){
+                        $color=$product_attribute["text"];
+                        break;
+                    }
+                }
+                $data['color_products'][]=[
+                    "color"=>$color,
+                    'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'])
+                ];
+            }
+
+            $results = $this->model_catalog_product->getProductRelatedArray($this->request->get['product_id']);
+            $data['array_products']=[];
+            foreach ($results as $result){
+                $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$result['product_id'] . "' AND a.attribute_group_id = '" . 1 . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                $array="";
+                foreach ($product_attribute_query->rows as $product_attribute) {
+                    if($product_attribute['attribute_id']=="12"){
+                        $array=$product_attribute["text"];
+                        break;
+                    }
+                }
+                $data['array_products'][]=[
+                    "array"=>$array,
+                    'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id']),
+                    "number"=>(int)$array
+                ];
+            }
+
+            $resulArray = array_merge($data['Colir_Array']['array'], $data['array_products']);
+
+            $resulArrayColumn = array_column($resulArray, 'number');
+            array_multisort($resulArrayColumn, SORT_ASC, $resulArray);
+            $data['resulArray']=$resulArray;
+
+            $data['cartLink'] = $this->url->link('checkout/cart');
+            //********************************************************
+
+
+	             ]]>
+            </add>
+        </operation>
+    </file>
+
+<!--
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA[//Realeted color]]>
+            </search>
+            <add position="after">
+                <![CDATA[
+              //************************************************************************************************
+                $Colir_Array = ['color' => [], 'array' => []];
+                $product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM " .
+                    DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id =
+                a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id =
+                ag.attribute_group_id) LEFT JOIN " . DB_PREFIX . "attribute_group_description agd ON
+                (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$result['product_id'] .
+                    "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY
+                ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
+                foreach ($product_attribute_group_query->rows as $product_attribute_group) {
+                    if ($product_attribute_group["attribute_group_id"] == "1") {
+                        $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX
+                            . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)
+                LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE
+                pa.product_id = '" . (int)$result['product_id'] . "' AND a.attribute_group_id = '" .
+                            (int)$product_attribute_group['attribute_group_id'] . "' AND ad.language_id = '" .
+                            (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" .
+                            (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                        foreach ($product_attribute_query->rows as $product_attribute) {
+                            if ($product_attribute['attribute_id'] == "11") {
+                                $Colir_Array['color'] = $product_attribute["text"];
+                            }
+                            if ($product_attribute['attribute_id'] == "12") {
+                                $Colir_Array['array'][] =[
+                                    'array'=>$product_attribute["text"],
+                                     'href'=>false,
+                                      'number'=>(int)$product_attribute["text"]
+                                ];
+
+
+                            }
+                        }
+                    }
+                }
+                $Tresults = $this->model_catalog_product->getProductRelatedColor($result['product_id']);
+                $color_products = [];
+                foreach ($Tresults as $Tresult) {
+                    $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX
+                        . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)
+                LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE
+                pa.product_id = '" . (int)$Tresult['product_id'] . "' AND a.attribute_group_id = '" . 1 . "' AND
+                ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" .
+                        (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                    $color = "";
+                    foreach ($product_attribute_query->rows as $product_attribute) {
+                        if ($product_attribute['attribute_id'] == "11") {
+                            $color = $product_attribute["text"];
+                            break;
+                        }
+                    }
+                    $color_products[] = [
+                        "color" => $color,
+                        'href' => $this->url->link('product/product', 'product_id=' . $Tresult['product_id'])
+                    ];
+                }
+
+                $Tresults = $this->model_catalog_product->getProductRelatedArray($result['product_id']);
+                $array_products = [];
+                foreach ($Tresults as $Tresult) {
+                    $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX
+                        . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)
+                LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE
+                pa.product_id = '" . (int)$Tresult['product_id'] . "' AND a.attribute_group_id = '" . 1 . "' AND
+                ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" .
+                        (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                    $array = "";
+                    foreach ($product_attribute_query->rows as $product_attribute) {
+                        if ($product_attribute['attribute_id'] == "12") {
+                            $array = $product_attribute["text"];
+                            break;
+                        }
+                    }
+                    $array_products[] = [
+                        "array" => $array,
+                        'href' => $this->url->link('product/product', 'product_id=' . $Tresult['product_id']),
+                        'number'=>(int)$array,
+
+                    ];
+                }
+                $resulArray = array_merge($Colir_Array['array'], $array_products);
+                $resulArrayColumn = array_column($resulArray, 'number');
+                array_multisort($resulArrayColumn, SORT_ASC, $resulArray);
+                //*********************************************************
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA['product_id'  => $result['product_id'],]]>
+            </search>
+            <add position="after">
+                <![CDATA[
+                    'array_products' => $resulArray,
+                    'color_products' => $color_products,
+                    'Colir_Array' => $Colir_Array,
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+-->
+
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA[$data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_height'));]]>
+            </search>
+            <add position="replace">
+                <![CDATA[
+                   $data['thumb']='/image/'.$product_info['image'];
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA['thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'))]]>
+            </search>
+            <add position="replace">
+                <![CDATA[
+                   'thumb' =>'/image/'.$result['image']
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA[$image = $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_related_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_related_height'));]]>
+            </search>
+            <add position="replace">
+                <![CDATA[
+                   $image='/image/'.$result['image'];
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+</modification>

@@ -1,0 +1,14 @@
+{% for product in products %}
+    <div class="col-6">
+        <a class="popularCategoryItem" href="{{ product.href }}">
+            {% if  product.thumb  %}
+                <picture >
+                    <img   alt="{{ product.name }}" title="{{ product.name }}"
+                           src="{{ product.thumb }}" />
+                </picture>
+            {% endif %}
+            <span class="popularCategoryItem__title">{{ product.name }}</span>
+            <span class="popularCategoryItem__price">{{ product.total }} </span>
+        </a>
+    </div>
+{% endfor %}

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Modification test</name>
+    <code>test</code>
+    <version>1.0</version>
+    <author>OpenCart Ltd</author>
+    <link>http://www.opencart.com</link>
+
+    <file path="admin/controller/setting/setting.php">
+        <operation>
+            <search>
+                <![CDATA[
+            if (isset($this->request->post['config_telephone'])) {
+                ]]>
+            </search>
+
+            <add position="before">
+                <![CDATA[
+
+                if (isset($this->request->post['config_telephone2'])) {
+		           	 $data['config_telephone2'] = $this->request->post['config_telephone2'];
+		        } else {
+			         $data['config_telephone2'] = $this->config->get('config_telephone2');
+		        }
+
+                if (isset($this->request->post['config_whatsapp'])) {
+		           	 $data['config_whatsapp'] = $this->request->post['config_whatsapp'];
+		        } else {
+			         $data['config_whatsapp'] = $this->config->get('config_whatsapp');
+		        }
+
+                if (isset($this->request->post['config_viber'])) {
+		           	 $data['config_viber'] = $this->request->post['config_viber'];
+		        } else {
+			         $data['config_viber'] = $this->config->get('config_viber');
+		        }
+
+                if (isset($this->request->post['config_telegram'])) {
+		           	 $data['config_telegram'] = $this->request->post['config_telegram'];
+		        } else {
+			         $data['config_telegram'] = $this->config->get('config_telegram');
+		        }
+
+
+                if (isset($this->request->post['config_fb'])) {
+		           	 $data['config_fb'] = $this->request->post['config_fb'];
+		        } else {
+			         $data['config_fb'] = $this->config->get('config_fb');
+		        }
+
+                if (isset($this->request->post['config_vk'])) {
+		           	 $data['config_vk'] = $this->request->post['config_vk'];
+		        } else {
+			         $data['config_vk'] = $this->config->get('config_vk');
+		        }
+
+
+                if (isset($this->request->post['config_instagram'])) {
+		           	 $data['config_instagram'] = $this->request->post['config_instagram'];
+		        } else {
+			         $data['config_instagram'] = $this->config->get('config_instagram');
+		        }
+
+
+                if (isset($this->request->post['config_youtube'])) {
+		           	 $data['config_youtube'] = $this->request->post['config_youtube'];
+		        } else {
+			         $data['config_youtube'] = $this->config->get('config_youtube');
+		        }
+
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/setting/setting.twig">
+        <operation>
+            <search>
+                <![CDATA[
+            {% if locations %}
+                ]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-whatsapp">Телефон 2</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_telephone2" value="{{ config_telephone2 }}"  id="input-config_telephone2" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-whatsapp">whatsapp</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_whatsapp" value="{{ config_whatsapp }}"  id="input-whatsapp" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-viber">viber</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_viber" value="{{ config_viber }}"  id="input-viber" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-telegram">telegram</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_telegram" value="{{ config_telegram }}"  id="input-telegram" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-fb">fb</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_fb" value="{{ config_fb }}"  id="input-fb" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-vk">vk</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_vk" value="{{ config_vk }}"  id="input-vk" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-instagram">instagram</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_instagram" value="{{ config_instagram }}"  id="input-instagram" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-youtube">youtube</label>
+                <div class="col-sm-10">
+                  <input type="text" name="config_youtube" value="{{ config_youtube }}"  id="input-youtube" class="form-control" />
+                </div>
+              </div>
+
+	             ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/common/footer.php">
+        <operation>
+            <search>
+                <![CDATA[
+                $data['scripts'] = $this->document->getScripts('footer');
+                ]]>
+            </search>
+            <add position="after">
+                <![CDATA[
+
+                $data['telephone'] = $this->config->get('config_telephone');
+                $data['config_open'] = $this->config->get('config_open');
+                $data['config_meta_description'] = $this->config->get('config_meta_description');
+
+                $data['config_whatsapp'] = $this->config->get('config_whatsapp');
+                $data['config_viber'] = $this->config->get('config_viber');
+                $data['config_telegram'] = $this->config->get('config_telegram');
+
+                $data['config_fb'] = $this->config->get('config_fb');
+                $data['config_vk'] = $this->config->get('config_vk');
+                $data['config_instagram'] = $this->config->get('config_instagram');
+                $data['config_youtube'] = $this->config->get('config_youtube');
+
+
+	             ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/information/contact.php">
+        <operation>
+            <search>
+                <![CDATA[
+                $data['telephone'] = $this->config->get('config_telephone');
+                ]]>
+            </search>
+            <add position="after">
+                <![CDATA[
+
+                  $data['telephone2'] = $this->config->get('config_telephone2');
+                 $data['config_email'] = $this->config->get('config_email');
+	             ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA[
+                $data['tab_review'] = sprintf($this->language->get('tab_review'), $product_info['reviews']);
+                ]]>
+            </search>
+            <add position="after">
+                <![CDATA[
+                  $data['count_review']=$product_info['reviews'];
+	             ]]>
+            </add>
+        </operation>
+    </file>
+
+
+</modification>

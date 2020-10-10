@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>TMD Footer Module</name>
+    <version>3.x</version>
+    <code>#OFM07</code>
+    <author>TMD(opencartextensions.in)</author>
+    <link>http://opencartextensions.in/</link>
+
+    <file path="admin/language/*/common/column_left.php">
+        <operation error="skip">
+            <search><![CDATA[// Text]]></search>
+            <add position="after"><![CDATA[
+				// FooterMenu
+			$_['text_footertitle']                 = ' Footer title';
+			$_['text_footerlink']                  = 'Footer link';
+			$_['text_footermenu']                  = 'TMD Footer Menu';
+			]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/common/column_left.php">
+        <operation error="skip">
+            <search><![CDATA[// System]]></search>
+            <add position="before"><![CDATA[
+			/* TMD Custom Footer Menu */
+			$customfooter = array();
+
+			if ($this->user->hasPermission('access', 'extension/footerlink')) {
+				$customfooter[] = array(
+					'name'	   => $this->language->get('text_footerlink'),
+					'href'     => $this->url->link('extension/footerlink', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()
+				);
+			}
+
+			if ($this->user->hasPermission('access', 'extension/footertitle')) {
+				$customfooter[] = array(
+					'name'	   => $this->language->get('text_footertitle'),
+					'href'     => $this->url->link('extension/footertitle', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()
+				);
+			}
+
+			if ($customfooter) {
+				$data['menus'][] = array(
+					'id'       => 'menu-customfooter',
+					'icon'	   => 'fa fa-share-alt fa-fw',
+					'name'	   => $this->language->get('text_footermenu'),
+					'href'     => '',
+					'children' => $customfooter
+				);
+			}
+
+			/* TMD Custom Footer Menu */ ]]></add>
+        </operation>
+    </file>
+
+
+    <file path="catalog/controller/common/footer.php">
+        <operation>
+            <search><![CDATA[return $this->load->view('common/footer', $data);]]></search>
+            <add position="before"><![CDATA[$this->load->model('catalog/information');
+
+		$data['footer_titles'] = $this->model_catalog_information->getFotterTitle();]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/catalog/information.php">
+        <operation>
+            <search><![CDATA[public function getInformations() {]]></search>
+            <add position="before"><![CDATA[
+				public function getFotterTitle(){
+			$data=array();
+			$query =$this->db->query("SELECT ftd.title,ft.footertitle_id FROM " . DB_PREFIX . "footertitle ft LEFT JOIN " . DB_PREFIX . "footertitle_description ftd ON (ft.footertitle_id = ftd.footertitle_id) where ftd.language_id = '" . (int)$this->config->get('config_language_id') . "' and ft.status=1 order by ft.sort_order");
+
+
+
+			foreach($query->rows as $row){
+				$query2 = $this->db->query("SELECT * FROM " . DB_PREFIX . "footerlink f LEFT JOIN " . DB_PREFIX . "footerlink_description fd ON (f.footerlink_id = fd.footerlink_id) where fd.language_id = '" . (int)$this->config->get('config_language_id') . "' and f.status=1 and f.selectheading='".$row['footertitle_id']."' order by f.sort_order");
+				$subtitle=array();
+				foreach($query2->rows as $row2){
+					$subtitle[]=array('title' => $row2['title'], 'link' =>$row2['link']);
+				}
+
+				$data[]=array(
+					'title' => $row['title'],
+					'sub_title' => $subtitle
+				);
+			}
+
+			return $data;
+		}]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/*/template/common/footer.twig">
+        <operation>
+            <search><![CDATA[<!-- footer menu -->]]></search>
+            <add position="after"><![CDATA[
+            {% if footer_titles %}
+	               {% for footer_title in footer_titles %}
+		            <div class="col-lg-3 d-none d-lg-block">
+		             	<a href="#" class="footer__title" onclick="return false;" >{{ footer_title.title }}</a>
+			            {% if footer_title.sub_title %}
+				       <ul class="footer__nav">
+				        	{% for subtitle in footer_title.sub_title  %}
+					        	{% if subtitle.href %}
+					     	      <li><a href="{{ subtitle.href }}">{{ subtitle.title }}</a></li>
+						        {% else %}
+						            <li><a href="{{ subtitle.link }}">{{ subtitle.title }}</a></li>
+						        {% endif %}
+					       {% endfor %}
+				        </ul>
+			{% endif %}
+		     </div>
+	       {% endfor %}
+         {% endif %}
+
+
+		]]></add>
+        </operation>
+        <operation>
+            <search><![CDATA[<p>{{ powered }}</p> ]]></search>
+            <add position="replace"><![CDATA[</div>
+    <hr>
+    <p>{{ powered }}</p>]]></add>
+        </operation>
+    </file>
+</modification>

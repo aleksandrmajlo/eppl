@@ -1,0 +1,37 @@
+{% for module in modules %}
+    {{ module }}
+{% endfor %}
+
+{% if featureds %}
+    <section class="sProducts section" id="sProducts">
+        <div class="container">
+            <div class="section-title text-center">
+                <h2>Товари</h2>
+            </div>
+            <div class="tabs">
+                <div class="tabs__caption">
+                    {% for  key,featured in featureds %}
+                        {% if  key == 0 %}
+                            <div class="tabs__btn active">{{ featured.name }}</div>
+                        {% else %}
+                            <div class="tabs__btn">{{ featured.name }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="tabs__wrap">
+                    {% for  key,featured in featureds %}
+                        {% if  key == 0 %}
+                            <div class="tabs__content active">
+                                {{ featured.output }}
+                            </div>
+                        {% else %}
+                            <div class="tabs__content ">
+                                {{ featured.output }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif %}

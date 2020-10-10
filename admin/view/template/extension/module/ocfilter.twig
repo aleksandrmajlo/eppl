@@ -1,0 +1,727 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-ocfilter" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary" onclick="$('#form-ocfilter').attr('action','{{ save }}');"><i class="fa fa-save"></i></button>
+        <button type="submit" form="form-ocfilter" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success" onclick="$('#form-ocfilter').attr('action','{{ apply }}');"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <ul class="list-inline pull-right">
+          <li><a href="{{ filter_list }}" target="_blank"><i class="fa fa-fw fa-code-fork"></i> {{ text_filter_list }}</a></li>
+          <li><a href="{{ filter_page_list }}" target="_blank"><i class="fa fa-fw fa-file-text-o"></i> {{ text_filter_page_list }}</a></li>
+          <li><a href="https://ocfilter.com/faq" target="_blank"><i class="fa fa-fw fa-question-circle"></i> {{ text_faq }}</a></li>
+        </ul>
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="" method="post" enctype="multipart/form-data" id="form-ocfilter" class="form-horizontal">
+          <div role="tabs">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+              <li><a href="#tab-option" data-toggle="tab">{{ tab_option }}</a></li>
+              <li><a href="#tab-price-filtering" data-toggle="tab">{{ tab_price_filtering }}</a></li>
+              <li><a href="#tab-other" data-toggle="tab">{{ tab_other }}</a></li>
+              <li><a href="#tab-copy" data-toggle="tab">{{ tab_copy }}</a></li>
+            </ul>
+
+          	<div class="tab-content">
+              <div id="tab-general" class="tab-pane active">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-status">{{ entry_status }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if status %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="status" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="status" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="status" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="status" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_status }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-status">{{ entry_sub_category }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if sub_category %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="sub_category" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="sub_category" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="sub_category" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="sub_category" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_sub_category }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-sitemap-status">{{ entry_sitemap }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if sitemap_status %}
+                      <label class="btn btn-default active" data-toggle="trigger" onclick="$('#sitemap-link').collapse('show')">
+                        <input type="radio" name="sitemap_status" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default" onclick="$('#sitemap-link').collapse('hide')">
+                        <input type="radio" name="sitemap_status" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default" onclick="$('#sitemap-link').collapse('show')">
+                        <input type="radio" name="sitemap_status" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active" data-toggle="trigger" onclick="$('#sitemap-link').collapse('hide')">
+                        <input type="radio" name="sitemap_status" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="collapse" id="sitemap-link">
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">{{ entry_sitemap_link }}</label>
+                    <div class="col-sm-9">
+                      <input type="text" name="sitemap_link" value="{{ sitemap_link }}" class="form-control" onclick="$(this).select();" readonly="readonly" />
+                    </div>
+                  </div>
+                </div>
+  		        </div>
+
+  		        <div id="tab-option" class="tab-pane">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-status">{{ entry_search_button }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if search_button %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="search_button" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="search_button" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="search_button" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="search_button" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_search_button }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-show-selected">{{ entry_show_selected }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if show_selected %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="show_selected" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="show_selected" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="show_selected" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="show_selected" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_show_selected }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-show-price">{{ entry_show_price }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if show_price %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="show_price" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="show_price" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="show_price" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="show_price" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_show_price }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-show-counter">{{ entry_show_counter }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if show_counter %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="show_counter" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="show_counter" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="show_counter" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="show_counter" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_show_counter }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-manufacturer">{{ entry_manufacturer }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if manufacturer %}
+                      <label class="btn btn-default active" data-toggle="trigger" onclick="$('#manufacturer-type').collapse('show')">
+                        <input type="radio" name="manufacturer" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default" onclick="$('#manufacturer-type').collapse('hide')">
+                        <input type="radio" name="manufacturer" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default" onclick="$('#manufacturer-type').collapse('show')">
+                        <input type="radio" name="manufacturer" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active" data-toggle="trigger" onclick="$('#manufacturer-type').collapse('hide')">
+                        <input type="radio" name="manufacturer" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_manufacturer }}</p>
+                  </div>
+                </div>
+
+                <div class="collapse" id="manufacturer-type">
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label" for="input-manufacturer-type">{{ entry_type }}</label>
+                    <div class="col-sm-5">
+                      <select name="manufacturer_type" id="input-manufacturer-type" class="form-control">
+                        {% for type in types %}
+                        {% if type == manufacturer_type %}
+                        <option value="{{ type }}" selected="selected">{{ type|capitalize }}</option>
+                        {% else %}
+                        <option value="{{ type }}">{{ type|capitalize }}</option>
+                        {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-stock-status">{{ entry_stock_status }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if stock_status %}
+                      <label class="btn btn-default active" data-toggle="trigger" onclick="$('#stock-status-method').collapse('show')">
+                        <input type="radio" name="stock_status" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default" onclick="$('#stock-status-method').collapse('hide')">
+                        <input type="radio" name="stock_status" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default" onclick="$('#stock-status-method').collapse('show')">
+                        <input type="radio" name="stock_status" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active" data-toggle="trigger" onclick="$('#stock-status-method').collapse('hide')">
+                        <input type="radio" name="stock_status" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_stock_status }}</p>
+                  </div>
+                </div>
+
+                <div class="collapse" id="stock-status-method">
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label" for="input-stock-status-method">{{ entry_stock_status_method }}</label>
+                    <div class="col-sm-9">
+                      <div class="btn-group" data-toggle="buttons">
+                        {% if stock_status_method == 'quantity' %}
+                        <label class="btn btn-default active" data-toggle="trigger" onclick="$('.collapse-group-1').collapse('hide').filter('#stock-status-quantity').collapse('show')">
+                          <input type="radio" name="stock_status_method" value="quantity" autocomplete="off" checked="checked" /> {{ text_stock_by_quantity }}
+                        </label>
+                        <label class="btn btn-default" onclick="$('.collapse-group-1').collapse('hide').filter('#stock-status-id').collapse('show')">
+                          <input type="radio" name="stock_status_method" value="stock_status_id" autocomplete="off" /> {{ text_stock_by_status_id }}
+                        </label>
+                        {% else %}
+                        <label class="btn btn-default" onclick="$('.collapse-group-1').collapse('hide').filter('#stock-status-quantity').collapse('show')">
+                          <input type="radio" name="stock_status_method" value="quantity" autocomplete="off" /> {{ text_stock_by_quantity }}
+                        </label>
+                        <label class="btn btn-default active" data-toggle="trigger" onclick="$('.collapse-group-1').collapse('hide').filter('#stock-status-id').collapse('show')">
+                          <input type="radio" name="stock_status_method" value="stock_status_id" autocomplete="off" checked="checked" /> {{ text_stock_by_status_id }}
+                        </label>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="collapse collapse-group-1" id="stock-status-id">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label" for="input-stocks-tatus-type">{{ entry_type }}</label>
+                      <div class="col-sm-5">
+                        <select name="stock_status_type" id="input-stocks-tatus-type" class="form-control">
+                          {% for type in types %}
+                          {% if type == stock_status_type %}
+                          <option value="{{ type }}" selected="selected">{{ type|capitalize }}</option>
+                          {% else %}
+                          <option value="{{ type }}">{{ type|capitalize }}</option>
+                          {% endif %}
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="collapse collapse-group-1" id="stock-status-quantity">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label" for="input-stock-out-value">{{ entry_stock_out_value }}</label>
+                      <div class="col-sm-9">
+                        <div class="btn-group" data-toggle="buttons">
+                          {% if stock_out_value %}
+                          <label class="btn btn-default active">
+                            <input type="radio" name="stock_out_value" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                          </label>
+                          <label class="btn btn-default">
+                            <input type="radio" name="stock_out_value" value="0" autocomplete="off" /> {{ text_disabled }}
+                          </label>
+                          {% else %}
+                          <label class="btn btn-default">
+                            <input type="radio" name="stock_out_value" value="1" autocomplete="off" /> {{ text_enabled }}
+                          </label>
+                          <label class="btn btn-default active">
+                            <input type="radio" name="stock_out_value" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                          </label>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  		        </div>
+  		        <div id="tab-price-filtering" class="tab-pane">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-manual-price">{{ entry_manual_price }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if manual_price %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="manual_price" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="manual_price" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="manual_price" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="manual_price" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_manual_price }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-consider-discount">{{ entry_consider_discount }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if consider_discount %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="consider_discount" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="consider_discount" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="consider_discount" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="consider_discount" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+                    <p class="help-block">{{ help_consider_discount }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-consider-special">{{ entry_consider_special }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if consider_special %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="consider_special" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="consider_special" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="consider_special" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="consider_special" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+
+                    <p class="help-block">{{ help_consider_special }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-consider-option">{{ entry_consider_option }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if consider_option %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="consider_option" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="consider_option" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="consider_option" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="consider_option" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+                    <p class="help-block">{{ help_consider_option }}</p>
+                  </div>
+                </div>
+  		        </div>
+
+  		        <div id="tab-other" class="tab-pane">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-show-options-limit">{{ entry_show_first_limit }}</label>
+                  <div class="col-sm-4">
+                    <div class="input-group">
+                      <input type="number" name="show_options_limit" min="0" value="{{ show_options_limit }}" class="form-control" id="input-show-options-limit" />
+                      <span class="input-group-addon">{{ text_options }}</span>
+                    </div><!-- /.input-group -->
+                    <p class="help-block">{{ help_show_options_limit }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-show-values-limit">{{ entry_show_first_limit }}</label>
+                  <div class="col-sm-4">
+                    <div class="input-group">
+                      <input type="number" name="show_values_limit" min="0" value="{{ show_values_limit }}" class="form-control" id="input-show-values-limit" />
+                      <span class="input-group-addon">{{ text_values }}</span>
+                    </div><!-- /.input-group -->
+                    <p class="help-block">{{ help_show_values_limit }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-hide-empty-values">{{ entry_hide_empty_values }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if hide_empty_values %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="hide_empty_values" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="hide_empty_values" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="hide_empty_values" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="hide_empty_values" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      {% endif %}
+                    </div>
+                    <p class="help-block">{{ help_hide_empty_values }}</p>
+                  </div>
+                </div>
+  		        </div>
+
+  		        <div id="tab-copy" class="tab-pane">
+                <h4>{{ nav_copy_filter }}</h4>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-copy-type">{{ entry_copy_type }}</label>
+                  <div class="col-sm-5">
+                    <select name="copy_type" id="input-copy-type" class="form-control">
+                      {% for type in types %}
+                      {% if type == copy_type %}
+                      <option value="{{ type }}" selected="selected">{{ type|capitalize }}</option>
+                      {% else %}
+                      <option value="{{ type }}">{{ type|capitalize }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-truncate">{{ entry_copy_status }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if copy_status > 0 %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_status" value="1" autocomplete="off" checked="checked" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_status" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_status" value="-1" autocomplete="off" /> {{ text_auto }}
+                      </label>
+                      {% elseif copy_status < 0 %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_status" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_status" value="0" autocomplete="off" /> {{ text_disabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_status" value="-1" autocomplete="off" checked="checked" /> {{ text_auto }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_status" value="1" autocomplete="off" /> {{ text_enabled }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_status" value="0" autocomplete="off" checked="checked" /> {{ text_disabled }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_status" value="-1" autocomplete="off" /> {{ text_auto }}
+                      </label>
+                      {% endif %}
+                    </div>
+                    <p class="help-block">{{ help_copy_status_auto }}</p>
+                  </div>
+                </div>
+
+                <h4>{{ nav_copy_source }}</h4>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-copy-attribute">{{ entry_copy_attribute }}</label>
+                  <div class="col-sm-4">
+                    <div class="input-group">
+                      <span class="input-group-btn" data-toggle="buttons">
+                        {% if copy_attribute %}
+                        <label class="btn btn-default active" data-toggle="trigger" onclick="$('[name=\'attribute_separator\']').prop('disabled', false)">
+                          <input type="radio" name="copy_attribute" value="1" autocomplete="off" checked="checked" /> {{ text_yes }}
+                        </label>
+                        <label class="btn btn-default" onclick="$('[name=\'attribute_separator\']').prop('disabled', true)">
+                          <input type="radio" name="copy_attribute" value="0" autocomplete="off" /> {{ text_no }}
+                        </label>
+                        {% else %}
+                        <label class="btn btn-default" onclick="$('[name=\'attribute_separator\']').prop('disabled', false)">
+                          <input type="radio" name="copy_attribute" value="1" autocomplete="off" /> {{ text_yes }}
+                        </label>
+                        <label class="btn btn-default active" data-toggle="trigger" onclick="$('[name=\'attribute_separator\']').prop('disabled', true)">
+                          <input type="radio" name="copy_attribute" value="0" autocomplete="off" checked="checked" /> {{ text_no }}
+                        </label>
+                        {% endif %}
+                      </span>
+                      <input name="attribute_separator" type="text" class="form-control" placeholder="{{ entry_copy_attribute_separator }}" value="{{ copy_attribute_separator }}" disabled="disabled" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-copy-filter">{{ entry_copy_filter }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if copy_filter %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_filter" value="1" autocomplete="off" checked="checked" /> {{ text_yes }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_filter" value="0" autocomplete="off" /> {{ text_no }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_filter" value="1" autocomplete="off" /> {{ text_yes }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_filter" value="0" autocomplete="off" checked="checked" /> {{ text_no }}
+                      </label>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input-copy-option">{{ entry_copy_option }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      {% if copy_option %}
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_option" value="1" autocomplete="off" checked="checked" /> {{ text_yes }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_option" value="0" autocomplete="off" /> {{ text_no }}
+                      </label>
+                      {% else %}
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_option" value="1" autocomplete="off" /> {{ text_yes }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_option" value="0" autocomplete="off" checked="checked" /> {{ text_no }}
+                      </label>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+                <h4>{{ nav_copy_other }}</h4>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">{{ entry_copy_clear_filter }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_truncate" value="1" autocomplete="off" /> {{ text_yes }}
+                      </label>
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_truncate" value="0" autocomplete="off" checked="checked" /> {{ text_no }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">{{ entry_copy_category }}</label>
+                  <div class="col-sm-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      <label class="btn btn-default active">
+                        <input type="radio" name="copy_category" value="1" autocomplete="off" checked="checked" /> {{ text_yes }}
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="copy_category" value="0" autocomplete="off" /> {{ text_no }}
+                      </label>
+                    </div>
+                    <p class="help-block">{{ help_copy_category }}</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-offset-3 col-sm-9">
+                    <button type="button" class="btn btn-lg btn-primary" id="button-copy-filter" data-loading-text="{{ text_loading }}" data-complete-text="{{ text_complete }}"><i class="fa fa-copy"></i> {{ button_copy }}</button>
+                  </div>
+                </div>
+  		        </div>
+            </div>
+          </div>
+        </form>
+			</div>
+    </div>
+  </div>
+<script type="text/javascript"><!--
+$(function() {
+  $('[data-toggle="trigger"][onclick]').trigger('click');
+
+  var timer;
+
+  $('#button-copy-filter').on('click', function(e) {
+    clearTimeout(timer);
+
+    $('#tab-copy > .alert').remove();
+
+    var $button = $(this).button('loading');
+
+    $.post('index.php?route=extension/module/ocfilter/copyFilters&user_token={{ user_token }}', $('[name^="copy_"], [name="attribute_separator"]').serialize(), function(response) {
+      if (response['error']) {
+        $button.button('reset');
+
+        $('#tab-copy').prepend('<div class="alert alert-danger" role="alert">' + response['error'] + '</div>');
+      }
+
+      if (response['success']) {
+        $button.button('complete');
+
+        $('#tab-copy').prepend('<div class="alert alert-success" role="alert">' + response['success'] + '</div>');
+
+        timer = setTimeout(function() {
+          $button.button('reset');
+        }, 10 * 1000);
+      }
+    }, 'json');
+  });
+});
+//--></script>
+</div>
+{{ footer }}

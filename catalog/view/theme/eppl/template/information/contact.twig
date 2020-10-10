@@ -1,0 +1,84 @@
+{{ header }}
+
+<div class="pageHead">
+  <div class="pageHead__wrap">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+          {% for breadcrumb in breadcrumbs %}
+            <li class="breadcrumb-item">
+              <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            </li>
+          {% endfor %}
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-title section-title--contact">
+      <h1>{{ heading_title }}</h1>
+      <div class="section-title__contact">
+        Способи зв'язку з нами
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sContact" id="sContact">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-5">
+        <div class="sContact__wrap">
+          <a class="sContact__item" href="tel:{{ telephone }}"><span class="sContact__iconWrap">
+								<!-- picture-->
+				<picture class="lazy">
+				    <source srcset="#" data-srcset="/catalog/view/theme/eppl/img/@2x/webp/phone.webp" type="image/webp"/>
+                    <img src="#" data-src="/catalog/view/theme/eppl/img/@2x/phone.png" alt=""/>
+								</picture>
+              <!-- /picture--></span>
+            <span class="sContact__text">{{ telephone }}</span>
+          </a>
+          <a class="sContact__item" href="tel:{{ telephone2 }}">
+            <span class="sContact__iconWrap">
+								<!-- picture-->
+								<picture class="lazy">
+									<source srcset="#" data-srcset="/catalog/view/theme/eppl/img/@2x/webp/phone.webp" type="image/webp"/>
+                                  <img src="#" data-src="/catalog/view/theme/eppl/img/@2x/phone.png" alt=""/>
+								</picture>
+              </span>
+            <span class="sContact__text">{{ telephone2 }}</span>
+          </a>
+          <a class="sContact__item" href="mailto:{{ config_email }}">
+            <span class="sContact__iconWrap">
+								<picture class="lazy">
+									<source srcset="#" data-srcset="/catalog/view/theme/eppl/img/@2x/webp/mail.webp" type="image/webp"/>
+                                  <img src="#" data-src="img/@2x/mail.png" alt=""/>
+								</picture>
+             </span>
+            <span class="sContact__text">{{ config_email }}</span>
+          </a>
+          <div class="sContact__item">
+            <div class="sContact__iconWrap">
+              <picture class="lazy">
+                <source srcset="#" data-srcset="/catalog/view/theme/eppl/img/@2x/webp/location.webp" type="image/webp"/>
+                <img src="#" data-src="/catalog/view/theme/eppl/img/@2x/location.png" alt=""/>
+              </picture>
+            </div>
+            <div class="sContact__text">
+                {{ address }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <picture class="lazy">
+          <source srcset="#" data-srcset="/catalog/view/theme/eppl/img/@2x/webp/menedzher-po-prodazham.webp" type="image/webp"/>
+          <img src="#" data-src="/catalog/view/theme/eppl/img/@2x/menedzher-po-prodazham.jpg" alt=""/>
+        </picture>
+      </div>
+    </div>
+  </div>
+</div>
+{{ content_bottom }}
+{{ footer }}

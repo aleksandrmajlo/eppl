@@ -1,0 +1,39 @@
+{% if articles %}
+    <section class="sShares section" id="sShares">
+        <div class="container">
+            <div class="section-title text-center">
+                <h2>Акції та новини</h2>
+            </div>
+            <div class="row">
+                {% for article in articles %}
+                    <div class="col-md-6">
+                        <a class="sShares__item sShares__item--right" href="#">
+                            <!-- picture-->
+                            <picture class="lazy">
+                                <img src="#" data-src="{{ article.thumb }}" alt="{{ article.title }}"/>
+                            </picture>
+                            <!-- /picture-->
+                            {% if article.categories %}
+                                {% for cat in article.categories %}
+                                    <span class="sShares__subtitle">{{ cat.title }}</span>
+                                {% endfor %}
+                            {% endif %}
+
+                            <span class="sShares__text">
+                                <span class="sShares__title-sm">{{ article.title }}</span>
+                                <span class="sShares__beveledText">
+                                    <span class="h6">
+                                        {{ article.short_description }}
+                                    </span>
+                                </span>
+                                <span  class="sShares__btn">Детальніше</span>
+                            </span>
+                        </a>
+                    </div>
+                {% endfor %}
+                <a class="sShares__seeAll" href="/blog">Більше новин</a>
+            </div>
+        </div>
+    </section>
+{% endif %}
+

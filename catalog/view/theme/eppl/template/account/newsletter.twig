@@ -1,0 +1,74 @@
+{{ header }}
+<div class="pageHead">
+    <div class="pageHead__wrap">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+                    {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+{{ content_top }}
+<section class="sLK section" id="sLK">
+    <div class="container">
+        <div class="row">
+
+            <div class="sLK__col col-lg-3">
+                <div class="section-title section-title--bonuses d-lg-none">
+                    <h1>{{ heading_title }}</h1>
+                </div>
+                {{ column_left }}
+            </div>
+
+            <div class="col">
+
+                <div class="section-title section-title--bonuses d-none d-lg-block">
+                    <h1>{{ heading_title }}</h1>
+                </div>
+
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_newsletter }}</label>
+                            <div class="col-sm-10">
+                                {% if newsletter %}
+                                    <label class="radio-inline">
+                                        <input type="radio" name="newsletter" value="1" checked="checked" />
+                                        {{ text_yes }} </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="newsletter" value="0" />
+                                        {{ text_no }}</label>
+                                {% else %}
+                                    <label class="radio-inline">
+                                        <input type="radio" name="newsletter" value="1" />
+                                        {{ text_yes }} </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="newsletter" value="0" checked="checked" />
+                                        {{ text_no }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="buttons clearfix">
+                        <div class="pull-left"><a href="{{ back }}" class="btn btn-default">{{ button_back }}</a></div>
+                        <div class="pull-right">
+                            <input type="submit" value="{{ button_continue }}" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{{ column_right }}
+{{ content_bottom }}
+{{ footer }}

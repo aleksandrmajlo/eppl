@@ -1,0 +1,81 @@
+{{ header }}
+<div class="pageHead">
+    <div class="pageHead__wrap">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+                    {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+{{ content_top }}
+<section class="sLK section" id="sLK">
+    <div class="container">
+        <div class="row">
+
+            <div class="sLK__col col-lg-3">
+                <div class="section-title section-title--bonuses d-lg-none">
+                    <h1>{{ heading_title }}</h1>
+                </div>
+                {{ column_left }}
+            </div>
+
+            <div class="col">
+
+                <div class="section-title section-title--bonuses d-none d-lg-block">
+                    <h1>{{ heading_title }}</h1>
+                </div>
+
+                <p>{{ text_total }} <b>{{ total }}</b>.</p>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <td class="text-left">{{ column_date_added }}</td>
+                            <td class="text-left">{{ column_description }}</td>
+                            <td class="text-right">{{ column_amount }}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% if transactions %}
+                            {% for transaction in transactions %}
+                                <tr>
+                                    <td class="text-left">{{ transaction.date_added }}</td>
+                                    <td class="text-left">{{ transaction.description }}</td>
+                                    <td class="text-right">{{ transaction.amount }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td class="text-center" colspan="5">{{ text_empty }}</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                    <div class="col-sm-6 text-right">{{ results }}</div>
+                </div>
+                <div class="buttons clearfix">
+                    <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{{ column_right }}
+{{ content_bottom }}
+{{ footer }}

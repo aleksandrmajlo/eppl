@@ -1,0 +1,198 @@
+{{ header }}
+<div class="pageHead">
+    <div class="pageHead__wrap">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+    {% if categories %}
+        <div class="container">
+            <div class="sliderCategory sliderCategory--catalog">
+                <div class="swiper-container sliderCategory-js">
+                    <div class="swiper-wrapper">
+
+                        {% for category in categories %}
+                            <div class="swiper-slide">
+                                <a class="sliderCategory__slideWrap" href="{{ category.href }}">
+                                    {% if category.thumd %}
+                                        <picture>
+                                            <img class="swiper-lazy" src="#" data-src="{{ category.thumd }}"
+                                                 alt="{{ category.name }}"/>
+                                        </picture>
+                                    {% endif %}
+                                    <span class="sliderCategory__title">{{ category.name }}</span>
+                                </a>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{{ content_top }}
+<div class="container" id="content">
+    <div class="row">
+        <div class="col-lg-3">
+            {{ column_left }}
+        </div>
+        <div class="col">
+            <section class="sCatalog section" id="sCatalog">
+                <div class="section-title">
+                    <h1>{{ heading_title }}</h1>
+                    <div class="section-title__quantity">
+                        {{ totalProduct }}
+                    </div>
+                </div>
+                {% if thumb or description %}
+                    <div class="row">
+                        {% if description %}
+                            <div class="col-sm-10">{{ description }}</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if products %}
+                    <div class="sCatalog__sortWrap d-flex align-content-center flex-lg-nowrap">
+                        <p>{{ text_sort }}</p>
+                        <select id="input-sort" class="form-control" onchange="location = this.value;">
+                            {% for sorts in sorts %}
+                                {% if sorts.value == '%s-%s'|format(sort, order) %}
+                                    <option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+                                {% else %}
+                                    <option value="{{ sorts.href }}">{{ sorts.text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        {% for product in products %}
+
+                            <div class="col-6 col-lg-4">
+                                <div class="catalogItem">
+                                    <div class="catalogItem__imgWrap">
+
+                                        <a href="{{ product.href }}">
+                                            <picture class="lazy">
+                                                <img src="#" data-src="{{ product.thumb }}" alt="{{ product.name }}"
+                                                     title="{{ product.name }}"/>
+                                            </picture>
+                                        </a>
+                                        <div class="catalogItem__colors">
+
+                                            {% if product.Colir_Array['color'] %}
+                                                <div class="catalogItem__colorItem"
+                                                     style="background-color: {{ product.Colir_Array['color'] }};"></div>
+                                            {% endif %}
+
+
+                                            {% if product.color_products %}
+                                                {% for color_product in product.color_products %}
+                                                    <a class="catalogItem__colorItem" href="{{ color_product['href'] }}"
+                                                       style="background-color: {{ color_product['color'] }};display: block;"></a>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+                                    <a class="catalogItem__title" href="{{ product.href }}">{{ product.name }}</a>
+
+
+                                    {% if product.array_products %}
+                                        <div class="catalogItem__memoryWrap">
+                                            {% for item in product.array_products %}
+                                                {% if item.href %}
+
+                                                    <a class="catalogItem__memory" href="{{ item.href }}">
+                                                        {{ item.array }}
+                                                    </a>
+
+                                                {% else %}
+
+                                                    <a class="catalogItem__memory" href="#" onclick="return false;"
+                                                       style="background-color: rgb(116 220 0);">
+                                                        {{ item.array }}
+                                                    </a>
+                                                {% endif %}
+
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+
+                                    <div class="catalogItem__priceWrap">
+
+                                        {% if product.price %}
+                                            {% if not product.special %}
+                                                <div class="catalogItem__price">
+                                                    {{ product.price }}
+                                                </div>
+                                            {% else %}
+                                                <div class="catalogItem__price">
+                                                    {{ product.special }}
+                                                </div>
+                                                <div class="catalogItem__oldPrice">
+                                                    {{ product.price }}
+                                                </div>
+
+                                            {% endif %}
+                                            {% if product.tax %}
+                                                <div class="catalogItem__price">
+                                                    {{ text_tax }} {{ product.tax }}
+                                                </div>
+                                            {% endif %}
+
+                                        {% endif %}
+
+
+                                    </div>
+                                    <div class="catalogItem__buttonsWrap">
+                                        <div class="row justify-content-center align-items-center">
+                                            <div class="col-sm">
+                                                <a class="catalogItem__btn"
+                                                   onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');return false;"
+                                                   href="#">{{ button_cart }}
+                                                </a>
+                                            </div>
+                                            <div class="col-2 order-sm-first text-right">
+                                                <button onclick="compare.add('{{ product.product_id }}');"
+                                                        class="catalogItem__busket" type="button">
+                                                    <svg class="icon icon-basket ">
+                                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#basket"></use>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-2">
+                                                <button class="catalogItem__like"
+                                                        onclick="wishlist.add('{{ product.product_id }}');"
+                                                        type="button">
+                                                    <svg class="icon icon-heart ">
+                                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#heart"></use>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                    {{ pagination }}
+                {% endif %}
+                {{ column_right }}
+            </section>
+        </div>
+    </div>
+</div>
+{{ content_bottom }}
+{{ footer }}

@@ -1,0 +1,39 @@
+{% if option.color %}
+    <div class="ocf-color" style="background-color: #{{ value.color }};"></div>
+{% endif %}
+
+{% if option.image %}
+    <div class="ocf-image" style="background-image: url({{ value.image }});"></div>
+{% endif %}
+
+{% if value.selected %}
+    <label id="v-{{ value.id }}" class="ocf-selected custom-input" data-option-id="{{ option.option_id }}">
+        <input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="{{ value.params }}" checked="checked"
+               class="ocf-target custom-input__input" autocomplete="off"/>
+          <span class="custom-input__lab"></span>
+        <span class="custom-input__text">{{ value.name }}</span>
+        {% if show_counter %}
+            (<small ></small>)
+        {% endif %}
+    </label>
+{% elseif value.count %}
+    <label id="v-{{ value.id }}"  class="custom-input" data-option-id="{{ option.option_id }}">
+        <input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="{{ value.params }}" class="ocf-target custom-input__input"
+               autocomplete="off"/>
+        <span class="custom-input__lab"></span>
+        <span class="custom-input__text">{{ value.name }}</span>
+        {% if show_counter %}
+            (<small >{{ value.count }}</small>)
+        {% endif %}
+    </label>
+{% else %}
+    <label id="v-{{ value.id }}" class="disabled custom-input" data-option-id="{{ option.option_id }}">
+        <input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="" disabled="disabled"
+               class="ocf-target custom-input__input" autocomplete="off"/>
+        <span class="custom-input__lab"></span>
+        <span class="custom-input__text">{{ value.name }}</span>
+        {% if show_counter %}
+            (<small>0</small>)
+        {% endif %}
+    </label>
+{% endif %}

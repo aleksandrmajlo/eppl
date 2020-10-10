@@ -1,0 +1,22 @@
+<!-- > d_breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+        {% for breadcrumb in breadcrumbs %}
+            {% if breadcrumb.href %}
+                <li  class="breadcrumb-item">
+                    <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}
+                    </a>
+                </li>
+            {% else %}
+                <li class="breadcrumb-item active">
+                    <a >
+                        {{ breadcrumb.text }}
+                    </a>
+
+                </li>
+            {% endif %}
+        {% endfor %}
+
+    </ol>
+</nav>
+<!-- /> d_breadcrumb -->

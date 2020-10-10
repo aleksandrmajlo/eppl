@@ -1,0 +1,274 @@
+<footer class="footer block-with-lazy">
+    <div class="container">
+        <div class="row">
+            <div class="footer__topLine d-lg-none">
+                <div class="footer__logo">
+                    <picture class="lazy">
+                        <source srcset="#" data-srcset="/catalog/view/theme/eppl/img/@2x/webp/logo-descr.webp"
+                                type="image/webp"/>
+                        <img src="#" data-src="/catalog/view/theme/eppl/img/@2x/logo-descr.png" alt="logo"/>
+                    </picture>
+                </div>
+                <div class="footer__mnu">
+                    <div class="footer__text">
+                        Меню
+                    </div>
+                    <div class="toggle-menu-mobile toggle-menu-mobile--js"><span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="messengers">
+                    {% if config_whatsapp is not empty %}
+                        <a class="messengers__item" target="_blank" href="{{ config_whatsapp }}">
+                            <svg class="icon icon-whatsapp ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#whatsapp"></use>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    {% if config_viber is not empty %}
+                        <a class="messengers__item" target="_blank" href="{{ config_viber }}">
+                            <svg class="icon icon-viber ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#viber"></use>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    {% if config_telegram is not empty %}
+                        <a class="messengers__item" target="_blank" href="{{ config_telegram }}">
+                            <svg class="icon icon-telegram ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#telegram"></use>
+                            </svg>
+                        </a>
+                    {% endif %}
+                </div>
+                <a class="footer__tel" href="tel:{{ telephone }}">{{ telephone }}</a>
+                <div class="footer__schedule">{{ config_open }}</div>
+                <div class="soc">
+                    {% if config_fb is not empty %}
+                        <a class="soc__item" href="{{ config_fb }}" target="_blank">
+                            <svg class="icon icon-fb ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#fb"></use>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    {% if config_vk is not empty %}
+                        <a class="soc__item" href="{{ config_vk }}" target="_blank">
+                            <svg class="icon icon-vk ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#vk"></use>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    {% if config_instagram is not empty %}
+                        <a class="soc__item" href="{{ config_instagram }}" target="_blank">
+                            <svg class="icon icon-instagram ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#instagram"></use>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    {% if config_youtube is not empty %}
+                        <a class="soc__item" href="{{ config_youtube }}" target="_blank">
+                            <svg class="icon icon-youtube ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#youtube"></use>
+                            </svg>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="footer__polite">&copy;&nbsp;<span class="curentYear"></span> {{ config_meta_description }}
+                </div>
+            </div>
+            <!-- footer menu -->
+
+            {% if footer_titles %}
+	               {% for footer_title in footer_titles %}
+		            <div class="col-lg-3 d-none d-lg-block">
+		             	<a href="#" class="footer__title" onclick="return false;" >{{ footer_title.title }}</a>
+			            {% if footer_title.sub_title %}
+				       <ul class="footer__nav">
+				        	{% for subtitle in footer_title.sub_title  %}
+					        	{% if subtitle.href %}
+					     	      <li><a href="{{ subtitle.href }}">{{ subtitle.title }}</a></li>
+						        {% else %}
+						            <li><a href="{{ subtitle.link }}">{{ subtitle.title }}</a></li>
+						        {% endif %}
+					       {% endfor %}
+				        </ul>
+			{% endif %}
+		     </div>
+	       {% endfor %}
+         {% endif %}
+
+
+		
+
+
+        </div>
+    </div>
+</footer>
+
+</div>
+
+{% for script in scripts %}
+    <script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+
+<script src="catalog/view/theme/eppl/js/lazy.js"></script>
+<script src="catalog/view/theme/eppl/libs/@fancyapps/fancybox/jquery.fancybox.min.js"></script>
+<script src="catalog/view/theme/eppl/libs/swiper/js/swiper.min.js"></script>
+<script src="catalog/view/theme/eppl/libs/ion-rangeslider/js/ion.rangeSlider.min.js"></script>
+<script src="catalog/view/theme/eppl/libs/inputmask/inputmask.min.js"></script>
+<script src="catalog/view/theme/eppl/js/common.js"></script>
+<script src="catalog/view/theme/eppl/js/majlo.js"></script>
+
+
+<div class="modal-win" id="one-click" style="display: none">
+    <div class="text-center">
+        Купити в 1 клік
+    </div>
+    <form id="OneClick">
+        <input type="hidden" name="product_id">
+        <div class="form-group">
+            <label>Телефон</label>
+            <input required type="tel" class="form-control" name="tel">
+        </div>
+        <button type="submit" class="btn btn-default">Купити</button>
+    </form>
+</div>
+
+<div class="modal-win" id="suc-click" style="display: none">
+    <div class="text-center">
+        <p class="text-success">
+            Дякуємо, Ваше замовлення отримано
+        </p>
+    </div>
+</div>
+
+
+<div class="modal-win" id="modal-reg" style="display: none">
+    <div class="modal-win__row row">
+        <div class="modal-win__col col-md-12 d-none d-md-block" style="border:none">
+            <div class="form-wrap">
+                <form method="post" action="/index.php?route=account/login" enctype="multipart/form-data">
+                    <input type="hidden" name="example-input-field"/>
+                    <div class="form-wrap__title form-data">У мене вже є аккаунт
+                        <a class="form-wrap__link d-md-none" href="/index.php?route=account/forgotten"">Забули
+                        пароль?</a>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-9 col-sm-6">
+                            <div class="form-wrap__input-wrap form-group">
+                                <input class="form-wrap__input form-control" type="email" placeholder="Ваш e-mail"
+                                       name="email" required="required"/>
+                            </div>
+                        </div>
+                        <div class="col-9 col-sm-6">
+                            <div class="form-wrap__input-wrap form-group">
+                                <input class="form-wrap__input form-control" type="password" placeholder="Пароль"
+                                       name="password" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-wrap__col col-sm-6">
+                            <button class="form-wrap__btn btn btn-success" type="submit">Війти
+                            </button>
+                        </div>
+                        <div class="form-wrap__col col-sm-6">
+                            <a class="form-wrap__link d-none d-md-block" href="/index.php?route=account/forgotten">Забули
+                                пароль?</a>
+                        </div>
+                        <input type="hidden" name="ShowPopup">
+                        {% if redirect %}
+                            <input type="hidden" name="redirect" value="{{ redirect }}"/>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-6 d-none ">
+
+            <div class="form-wrap" id="simpleRegister">
+
+
+                <form>
+
+                    <div class="form-wrap__title form-data">Регистрация<a class="form-wrap__link link-modal d-md-none"
+                                                                          href="#modal-entrance">У меня уже есть
+                            аккаунт</a>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-9 col-sm-6">
+                            <div class="form-wrap__input-wrap form-group"><input class="form-wrap__input form-control"
+                                                                                 type="text" placeholder="Имя"
+                                                                                 name="text"/>
+                            </div>
+                            <!-- +e.input-wrap-->
+                        </div>
+                        <div class="col-9 col-sm-6">
+                            <div class="form-wrap__input-wrap form-group"><input class="form-wrap__input form-control"
+                                                                                 type="tel" placeholder="Телефон"
+                                                                                 name="tel"/>
+                            </div>
+                            <!-- +e.input-wrap-->
+                        </div>
+                        <div class="col-9 col-sm-6">
+                            <div class="form-wrap__input-wrap form-group"><input class="form-wrap__input form-control"
+                                                                                 type="email" placeholder="Ваш e-mail"
+                                                                                 name="email" required="required"/>
+                            </div>
+                            <!-- +e.input-wrap-->
+                        </div>
+                        <div class="col-9 col-sm-6">
+                            <div class="form-wrap__input-wrap form-group"><input class="form-wrap__input form-control"
+                                                                                 type="password" placeholder="Пароль"
+                                                                                 name="password" required="required"/>
+                            </div>
+                            <!-- +e.input-wrap-->
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-wrap__polite d-md-none">
+                                <label class="custom-input"><input class="custom-input__input" type="checkbox"
+                                                                   name="checkbox" checked="checked"/><span
+                                            class="custom-input__lab"></span><small class="custom-input__text">Нажимая
+                                        на кнопку «Войти» или «Зарегистрироваться» вы соглашаетесь с <a href="#">условиями
+                                            оферты</a> и <a href="#">политикой конфидециальности</a></small>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-wrap__col col-sm-6">
+                            <button class="form-wrap__btn btn btn-success" type="submit">Зарегистрироваться
+                            </button>
+                        </div>
+                        <div class="form-wrap__col col-sm-6"><a class="form-wrap__link d-none d-md-block" href="#">Юридическим
+                                лицам</a>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-win__polite d-none ">
+        <label class="custom-input">
+            <input class="custom-input__input" type="checkbox" name="checkbox" checked="checked"/>
+            <span class="custom-input__lab"></span>
+            <small class="custom-input__text">Нажимая на кнопку «Войти» или «Зарегистрироваться» вы соглашаетесь с
+                <a href="#">условиями оферты</a> и <a href="#">политикой конфидециальности</a>
+            </small>
+        </label>
+    </div>
+</div>
+{#<script>#}
+{#    $('#simpleRegister').load('index.php?route=account/simpleregister #simple-content');#}
+{# </script>#}
+<script>
+    var _rcct = "d4b162d71f4bd5185b513b679d3db6046bbda805dbad2790c101dcf9dd33e002";
+    !function (t) {
+        var a = t.getElementsByTagName("head")[0];
+        var c = t.createElement("script");
+        c.type = "text/javascript";
+        c.src = "//c.retailcrm.tech/widget/loader.js";
+        a.appendChild(c);
+    } (document);
+</script>
+</body>
+</html>

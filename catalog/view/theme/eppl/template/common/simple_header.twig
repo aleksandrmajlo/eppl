@@ -1,0 +1,38 @@
+{{ header }}
+
+<div class="pageHead">
+    <div class="pageHead__wrap">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{{ content_top }}
+<section class="sLK section" id="sLK">
+    <div class="container">
+        <div class="row">
+            {% if column_left  %}
+                <div class="sLK__col col-lg-3">
+                    <div class="section-title section-title--bonuses d-lg-none">
+                        <h1>{{ heading_title }}</h1>
+                    </div>
+                    {{ column_left }}
+                </div>
+            {% endif  %}
+
+            <div class="col">
+                <div class="section-title section-title--bonuses d-none d-lg-block">
+                    <h1>{{ heading_title }}</h1>
+                </div>
+
+
+      
+      

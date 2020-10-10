@@ -1,0 +1,80 @@
+{{ header }}
+<div class="pageHead">
+  <div class="pageHead__wrap">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+          {% for breadcrumb in breadcrumbs %}
+            <li class="breadcrumb-item">
+              <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            </li>
+          {% endfor %}
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+
+{{ content_top }}
+<section class="sLK section" id="sLK">
+  <div class="container">
+    <div class="row">
+
+      <div class="sLK__col col-lg-3">
+        <div class="section-title section-title--bonuses d-lg-none">
+          <h1>{{ heading_title }}</h1>
+        </div>
+        {{ column_left }}
+      </div>
+
+      <div class="col">
+
+        <div class="section-title section-title--bonuses d-none d-lg-block">
+          <h1>{{ heading_title }}</h1>
+        </div>
+
+        {% if returns %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <td class="text-right">{{ column_return_id }}</td>
+                <td class="text-left">{{ column_status }}</td>
+                <td class="text-left">{{ column_date_added }}</td>
+                <td class="text-right">{{ column_order_id }}</td>
+                <td class="text-left">{{ column_customer }}</td>
+                <td></td>
+              </tr>
+              </thead>
+              <tbody>
+
+              {% for return in returns %}
+                <tr>
+                  <td class="text-right">#{{ return.return_id }}</td>
+                  <td class="text-left">{{ return.status }}</td>
+                  <td class="text-left">{{ return.date_added }}</td>
+                  <td class="text-right">{{ return.order_id }}</td>
+                  <td class="text-left">{{ return.name }}</td>
+                  <td class="text-right"><a href="{{ return.href }}" data-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 text-left">{{ pagination }}</div>
+            <div class="col-sm-6 text-right">{{ results }}</div>
+          </div>
+        {% else %}
+          <p class="section-title__text">{{ text_empty }}</p>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+</section>
+{{ column_right }}
+{{ content_bottom }}
+{{ footer }}

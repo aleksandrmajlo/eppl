@@ -1,0 +1,62 @@
+{
+    "codename": "d_bootstrap_rating",
+    "version": "2.0.0",
+    "name": "Bootstrap rating JS library",
+    "description": "Adds bootstrap rating js library to catalog/view/javascript/library/.",
+   
+    "author": {
+        "name": "Dreamvention",
+        "email": "info@dreamvention.com",
+        "url": "https://dreamvention.com"
+    },
+    "opencart_version": [
+        "2.0.0.0",
+        "2.0.1.0",
+        "2.0.1.1",
+        "2.0.2.0",
+        "2.0.3.1",
+        "2.1.0.1",
+        "2.1.0.2",
+        "2.2.0.0",
+        "2.3.0.0",
+        "2.3.0.1",
+        "2.3.0.2",
+        "3.0.0.0",
+        "3.0.1.1",
+        "3.0.1.2",
+        "3.0.2.0"
+    ],
+    "type": "library",
+    "license": {
+        "type": "free",
+        "url": "https://shopunity.net/licenses/free"
+    },
+    "install": {
+        "url": "extension/module/install&extension=d_bootstrap_rating"      
+    },
+    "support": {
+        "email": "support@dreamvention.com",
+        "url": "https:/dreamvention.com/support"
+    },
+    "files": [
+        "system/library/d_shopunity/extension/d_bootstrap_rating.json"
+            ],
+    "dirs": [
+        "admin/view/javascript/d_bootstrap_rating",
+        "catalog/view/javascript/d_bootstrap_rating"
+    ],
+    "changelog": [
+        {
+            "version": "2.0.0",
+            "change": "Added support for new opencart versions and moved out of library folder, updated to version 1.4.0"
+        },
+        {
+            "version": "1.0.1",
+            "change": "Add version opencart 2.3.0.2"
+        },
+        {
+            "version": "1.0.0",
+            "change": ""
+        }
+    ]
+}

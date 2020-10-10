@@ -1,0 +1,63 @@
+{
+    "codename": "d_fileinput",
+    "version": "1.1.0",
+    "name": "Fileinput JS library",
+    "description": "Adds fileinput js library",
+   
+    "author": {
+        "name": "Dreamvention",
+        "email": "info@dreamvention.com",
+        "url": "https://dreamvention.com"
+    },
+    "opencart_version": [
+        "2.0.0.0",
+        "2.0.1.0",
+        "2.0.1.1",
+        "2.0.2.0",
+        "2.0.3.1",
+        "2.1.0.1",
+        "2.1.0.2",
+        "2.2.0.0",
+        "2.3.0.0",
+        "2.3.0.1",
+        "2.3.0.2",
+        "3.0.0.0",
+        "3.0.1.1",
+        "3.0.1.2",
+        "3.0.2.0"
+    ],
+    "type": "library",
+    "license": {
+        "type": "free",
+        "url": "https://shopunity.net/licenses/free"
+    },
+    "support": {
+        "email": "support@dreamvention.com",
+        "url": "https:/dreamvention.com/support"
+    },
+    "files": [
+        "system/library/d_shopunity/extension/d_fileinput.json"
+            ],
+     "dirs": [
+        "admin/view/javascript/d_fileinput",
+        "catalog/view/javascript/d_fileinput"
+    ],
+    "changelog": [
+        {
+            "version": "1.1.0",
+            "change": "added new opencart versions and moved out of library folder"
+        },
+        {
+            "version": "1.0.2",
+            "change": "Update json"
+        },
+        {
+            "version": "1.0.1",
+            "change": "Add version 2.3.0.2"
+        },
+        {
+            "version": "1.0.0",
+            "change": ""
+        }
+    ]
+}

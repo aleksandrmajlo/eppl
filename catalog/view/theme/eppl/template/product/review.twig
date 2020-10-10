@@ -1,0 +1,40 @@
+{% if reviews %}
+    {% for review in reviews %}
+        <div class="feedback-tab__item">
+            <div class="feedback-tab__item-data">
+                <div class="feedback-tab__name">
+                    {{ review.author }}
+                </div>
+                <div class="feedback-tab__date">
+                    <svg class="icon icon-calendar ">
+                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#calendar"></use>
+                    </svg>
+                    <span>{{ review.date_added }}</span>
+                </div>
+                <div class="feedback-tab__stars-cont">
+                    {% for i in 1..5 %}
+                        {% if review.rating < i %}
+                          <div class="feedback-tab__star empty-star">
+                            <svg class="icon icon-star ">
+                              <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#star"></use>
+                            </svg>
+                          </div>
+                        {% else %}
+                          <div class="feedback-tab__star filled-star">
+                            <svg class="icon icon-star ">
+                              <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#star"></use>
+                            </svg>
+                          </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="feedback-tab__item-txt">
+                <p>{{ review.text }}</p>
+            </div>
+        </div>
+        <div class="text-right">{{ pagination }}</div>
+    {% endfor %}
+{% else %}
+    <p>{{ text_no_reviews }}</p>
+{% endif %}

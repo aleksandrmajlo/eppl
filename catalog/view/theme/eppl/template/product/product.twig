@@ -1,0 +1,969 @@
+{{ header }}
+<div class="pageHead">
+    <div class="pageHead__wrap">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <h1>{{ heading_title }}</h1>
+    </div>
+</div>
+
+<div class="sProdCard section" id="product">
+    <div class="sProdCard__container container">
+        <div class="sProdCard__row row">
+
+            <div class="col-lg-6">
+                {% if thumb or images %}
+                    <div class="sProdCard__sliders-cont">
+                        <div class="sProdCard__slider">
+                            <div class="swiper-container prod-card-slider-js">
+                                <div class="swiper-wrapper">
+                                    {% if thumb %}
+                                        <div class="swiper-slide">
+                                            <a class="sProdCard__slide-img" href="{{ popup }}"
+                                               data-fancybox="prod-card-img">
+                                                <img class="swiper-lazy" src="#" data-src="{{ thumb }}"
+                                                     title="{{ heading_title }}" alt="{{ heading_title }}"/>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    {% if images %}
+                                        {% for image in images %}
+                                            <div class="swiper-slide">
+                                                <a class="sProdCard__slide-img" href="{{ image.popup }}"
+                                                   data-fancybox="prod-card-img">
+                                                    <img class="swiper-lazy" src="#" data-src="{{ image.thumb }}"
+                                                         title="{{ heading_title }}" alt="{{ heading_title }}"/>
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sProdCard__thumbs">
+                            <div class="swiper-container prod-card-thumb-js">
+                                <div class="swiper-wrapper">
+                                    {% if thumb %}
+                                        <div class="swiper-slide">
+                                            <div class="sProdCard__thumb-img">
+                                                <img class="swiper-lazy" src="#"
+                                                     title="{{ heading_title }}" alt="{{ heading_title }}"
+                                                     data-src="{{ thumb }}"/>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if images %}
+                                        {% for image in images %}
+                                            <div class="swiper-slide">
+                                                <div class="sProdCard__thumb-img">
+                                                    <img class="swiper-lazy" src="#"
+                                                         title="{{ heading_title }}" alt="{{ heading_title }}"
+                                                         data-src="{{ image.thumb }}"/>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            <div class="swiper-prev-frame prod-card-th-prev">
+                                <svg class="icon icon-chevron-left ">
+                                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-left"></use>
+                                </svg>
+                            </div>
+                            <div class="swiper-next-frame prod-card-th-next">
+                                <svg class="icon icon-chevron-right ">
+                                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-right"></use>
+                                </svg>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endif %}
+                {{ column_left }}
+            </div>
+
+            <div class="col-lg-6">
+
+                <div class="prod-chars">
+
+                    <div class="prod-chars__chb-items">
+                        <div class="prod-chars__item">
+                            <div class="prod-chars__title">
+                                Артикул:
+                            </div>
+                            <div class="prod-chars__content">
+                                <div class="prod-chars__article-txt">
+                                    {{ model }}
+                                </div>
+                            </div>
+                        </div>
+                        {% if Colir_Array['colir'] is not empty %}
+                            <div class="prod-chars__item">
+
+                                <div class="prod-chars__title">
+                                    Колір:
+                                </div>
+                                <div class="prod-chars__content">
+                                    <div class="prod-chars__color-list">
+
+                                        <div class="prod-chars__color-item">
+                                            <label>
+                                                <input type="radio" name="prod-color" checked/>
+                                                <div class="color-circle"
+                                                     style="color: {{ Colir_Array['colir'] }};"></div>
+                                            </label>
+                                        </div>
+                                        {% for color_product in color_products %}
+                                            <a class="prod-chars__color-item" href="{{ color_product['href'] }}">
+                                                <label>
+                                                    <div class="color-circle"
+                                                         style="color: {{ color_product['color'] }};"></div>
+                                                </label>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if resulArray is not empty %}
+                            <div class="prod-chars__item">
+                                <div class="prod-chars__title">Пам'ять:
+                                </div>
+                                <div class="prod-chars__content">
+                                    <div class="prod-chars__memory-list">
+                                        {% for item in  resulArray %}
+
+                                            {% if item.href %}
+
+                                                <a class="prod-chars__memory-item" href="{{ item.href }}">
+                                                    <label>
+                                                        <div class="memory-item ">{{ item.array }}</div>
+                                                    </label>
+                                                </a>
+
+                                            {% else %}
+                                                <div class="prod-chars__memory-item">
+                                                    <label>
+                                                        <div style="background-color: rgb(116 220 0);"
+                                                             class="memory-item active">{{ item.array }}</div>
+                                                    </label>
+                                                </div>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if options %}
+                        <div class="prod-chars__chb-items">
+                            {% for option in options %}
+                                {% if option.type == 'select' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <label class="control-label"
+                                               for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                        <select name="option[{{ option.product_option_id }}]"
+                                                id="input-option{{ option.product_option_id }}" class="form-control">
+                                            <option value="">{{ text_select }}</option>
+                                            {% for option_value in option.product_option_value %}
+                                                <option value="{{ option_value.product_option_value_id }}">{{ option_value.name }}
+                                                    {% if option_value.price %}
+                                                        ({{ option_value.price_prefix }}{{ option_value.price }})
+                                                    {% endif %} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
+                                {% if option.type == 'radio' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <label class="control-label">{{ option.name }}</label>
+                                        <div id="input-option{{ option.product_option_id }}"> {% for option_value in option.product_option_value %}
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio"
+                                                               name="option[{{ option.product_option_id }}]"
+                                                               value="{{ option_value.product_option_value_id }}"/>
+                                                        {% if option_value.image %} <img src="{{ option_value.image }}"
+                                                                                         alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}"
+                                                                                         class="img-thumbnail"/> {% endif %}
+                                                        {{ option_value.name }}
+                                                        {% if option_value.price %}
+                                                            ({{ option_value.price_prefix }}{{ option_value.price }})
+                                                        {% endif %} </label>
+                                                </div>
+                                            {% endfor %} </div>
+                                    </div>
+                                {% endif %}
+                                {% if option.type == 'checkbox' %}
+
+                                    {% for option_value in option.product_option_value %}
+                                        <div class="prod-chars__chb-item">
+                                            <label>
+                                                <input type="checkbox" name="option[{{ option.product_option_id }}][]"
+                                                       value="{{ option_value.product_option_value_id }}"/>
+                                                {% if option_value.image %}
+                                                    <img src="{{ option_value.image }}"
+                                                         alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}"
+                                                         class="img-thumbnail"/>
+                                                {% endif %}
+                                                <div class="checkbox-cont"></div>
+                                                <div class="chb-txt">{{ option_value.name }}</div>
+                                                {% if option_value.price %}
+                                                    <div class="price">{{ option_value.price_prefix }}{{ option_value.price }}</div>  {% endif %}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+
+
+                                {% endif %}
+                                {% if option.type == 'text' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <label class="control-label"
+                                               for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                        <input type="text" name="option[{{ option.product_option_id }}]"
+                                               value="{{ option.value }}" placeholder="{{ option.name }}"
+                                               id="input-option{{ option.product_option_id }}" class="form-control"/>
+                                    </div>
+                                {% endif %}
+                                {% if option.type == 'textarea' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <label class="control-label"
+                                               for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                        <textarea name="option[{{ option.product_option_id }}]" rows="5"
+                                                  placeholder="{{ option.name }}"
+                                                  id="input-option{{ option.product_option_id }}"
+                                                  class="form-control">{{ option.value }}</textarea>
+                                    </div>
+                                {% endif %}
+                                {% if option.type == 'file' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <label class="control-label">{{ option.name }}</label>
+                                        <button type="button" id="button-upload{{ option.product_option_id }}"
+                                                data-loading-text="{{ text_loading }}"
+                                                class="btn btn-default btn-block"><i
+                                                    class="fa fa-upload"></i> {{ button_upload }}</button>
+                                        <input type="hidden" name="option[{{ option.product_option_id }}]" value=""
+                                               id="input-option{{ option.product_option_id }}"/>
+                                    </div>
+                                {% endif %}
+                                {% if option.type == 'date' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <label class="control-label"
+                                               for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                        <div class="input-group date">
+                                            <input type="text" name="option[{{ option.product_option_id }}]"
+                                                   value="{{ option.value }}" data-date-format="YYYY-MM-DD"
+                                                   id="input-option{{ option.product_option_id }}"
+                                                   class="form-control"/>
+                                            <span class="input-group-btn">
+                                       <button class="btn btn-default" type="button"><i
+                                                   class="fa fa-calendar"></i></button>
+                                     </span></div>
+                                    </div>
+                                {% endif %}
+                                {% if option.type == 'datetime' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <label class="control-label"
+                                               for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                        <div class="input-group datetime">
+                                            <input type="text" name="option[{{ option.product_option_id }}]"
+                                                   value="{{ option.value }}" data-date-format="YYYY-MM-DD HH:mm"
+                                                   id="input-option{{ option.product_option_id }}"
+                                                   class="form-control"/>
+                                            <span class="input-group-btn">
+                                          <button type="button" class="btn btn-default"><i
+                                                      class="fa fa-calendar"></i></button>
+                                        </span></div>
+                                    </div>
+                                {% endif %}
+                                {% if option.type == 'time' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <label class="control-label"
+                                               for="input-option{{ option.product_option_id }}">{{ option.name }}</label>
+                                        <div class="input-group time">
+                                            <input type="text" name="option[{{ option.product_option_id }}]"
+                                                   value="{{ option.value }}" data-date-format="HH:mm"
+                                                   id="input-option{{ option.product_option_id }}"
+                                                   class="form-control"/>
+                                            <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"><i
+                                                    class="fa fa-calendar"></i></button>
+                                   </span></div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                        </div>
+                    {% endif %}
+
+                    {% if recurrings %}
+                        <hr>
+                        <h3>{{ text_payment_recurring }}</h3>
+                        <div class="form-group required">
+                            <select name="recurring_id" class="form-control">
+                                <option value="">{{ text_select }}</option>
+                                {% for recurring in recurrings %}
+                                    <option value="{{ recurring.recurring_id }}">{{ recurring.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="help-block" id="recurring-description"></div>
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group d-none">
+                        <label class="control-label" for="input-quantity">{{ entry_qty }}</label>
+                        <input type="text" name="quantity" value="{{ minimum }}" size="2" id="input-quantity"
+                               class="form-control"/>
+                        <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                        <br/>
+                        <button type="button" style="display: none;" id="button-cart"
+                                data-loading-text="{{ text_loading }}"
+                                class="btn btn-primary btn-lg btn-block">{{ button_cart }}</button>
+                    </div>
+                    {% if minimum > 1 %}
+                        <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ text_minimum }}</div>
+                    {% endif %}
+                    <div class="prod-chars__buy-strip">
+                        {% if price %}
+                            <div class="prod-chars__buy-strip-price">
+                                {% if not special %}
+                                    {{ price }}
+                                {% else %}
+                                    <span>
+                                        <span style="text-decoration: line-through;">{{ price }}</span>
+                                    </span>
+                                    <span>
+                                        <h2>{{ special }}</h2>
+                                    </span>
+                                {% endif %}
+                                {% if tax %}
+                                    {{ text_tax }} {{ tax }}
+                                {% endif %}
+                                {% if points %}
+                                    {{ text_points }} {{ points }}
+                                {% endif %}
+
+                                {% if discounts %}
+                                    {% for discount in discounts %}
+                                        <span>{{ discount.quantity }}{{ text_discount }}{{ discount.price }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        <a class="prod-chars__to-bag-btn "
+                           id="triggerButtonCartProduct"
+                           href="#">
+                            <svg class="icon icon-shopping-bag ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#shopping-bag"></use>
+                            </svg>
+                            <span>{{ button_cart }}</span>
+                        </a>
+                        <a class="prod-chars__click-btn" onclick="cart.oneclick({{ product_id }});return false;"
+                           href="#">
+                            Купити в 1 клік
+                        </a>
+                    </div>
+                    {{ column_right }}
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="sProdDescr section" id="sProdDescr">
+    <div class="sProdDescr__container container">
+        <div class="tabs">
+            <div class="tabs__caption">
+                <div class="tabs__btn prod-descr-tab-js active">
+                    {{ tab_description }}
+                </div>
+                {% if attribute_groups %}
+                    <div class="tabs__btn prod-descr-tab-js">{{ tab_attribute }}</div>
+                {% endif %}
+                {% if review_status %}
+                    <div class="tabs__btn prod-descr-tab-js">{{ tab_review }}</div>
+                {% endif %}
+            </div>
+            <div class="tabs__wrap">
+                <div class="tabs__content active">
+                    <div class="description-tab">
+                        {{ description }}
+                    </div>
+                </div>
+                {% if attribute_groups %}
+                    <div class="tabs__content">
+                        <div class="prod-char-tab">
+                            {% for attribute_group in attribute_groups %}
+                                <div class="prod-char-tab__item">
+                                    <div class="prod-char-tab__header">
+                                        {{ attribute_group.name }}
+                                    </div>
+                                    <div class="prod-char-tab__table">
+                                        {% for attribute in attribute_group.attribute %}
+                                            <div class="prod-char-tab__row-item">
+                                                <div class="prod-char-tab__title">
+                                                    {{ attribute.name }}
+                                                </div>
+                                                <div class="prod-char-tab__description">
+                                                    {{ attribute.text }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if review_status %}
+                <div class="tabs__content">
+                    <div class="feedback-tab">
+                        <div class="feedback-tab__header">
+                            <div class="feedback-tab__amount">
+                                <p>Відгуків</p>
+                                <span>{{ count_review }}</span>
+                            </div>
+                            <a class="feedback-tab__feedb-btn scroll-link" href="#feedbackForm">
+                                Залишити відгук
+                            </a>
+                        </div>
+                    </div>
+                    <div class="feedback-tab__items">
+                        <div id="review"></div>
+                    </div>
+                    <div class="feedback-tab__form" id="feedbackForm">
+                        <div class="form-wrap">
+                            <form id="form-review">
+                                <picture class="lazy form-wrap__bg">
+                                    <source srcset="#"
+                                            data-srcset="/catalog/view/theme/eppl/img/@2x/webp/leave-feedback-bg.webp"
+                                            type="image/webp" media="(min-width:576px)"/>
+                                    <source srcset="#"
+                                            data-srcset="/catalog/view/theme/eppl/img/@1x/webp/leave-feedback-bg.webp"
+                                            type="image/webp"/>
+                                    <source srcset="#"
+                                            data-srcset="/catalog/view/theme/eppl/img/@2x/leave-feedback-bg.jpg"
+                                            type="image/jpg"
+                                            media="(min-width:576px)"/>
+                                    <source srcset="#"
+                                            data-srcset="/catalog/view/theme/eppl/img/@1x/leave-feedback-bg.jpg"
+                                            type="image/jpg"/>
+                                    <img src="#" data-src="/catalog/view/theme/eppl/img/@2x/leave-feedback-bg.jpg"
+                                         alt=""/>
+                                </picture>
+                                <div class="form-wrap__inner-cont">
+                                    <div class="form-wrap__stars-cont">
+                                        <div class="form-wrap__stars-title">
+                                            {{ text_write }}
+                                        </div>
+                                        <div class="form-wrap__stars">
+                                            <div class="form-wrap__star star-js">
+                                                <input type="radio" name="rating" value="1"/>
+                                                <svg class="icon icon-star ">
+                                                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#star"></use>
+                                                </svg>
+                                            </div>
+                                            <div class="form-wrap__star star-js">
+                                                <input type="radio" name="rating" value="2"/>
+                                                <svg class="icon icon-star ">
+                                                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#star"></use>
+                                                </svg>
+                                            </div>
+                                            <div class="form-wrap__star star-js">
+                                                <input type="radio" name="rating" value="3"/>
+                                                <svg class="icon icon-star ">
+                                                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#star"></use>
+                                                </svg>
+                                            </div>
+                                            <div class="form-wrap__star star-js">
+                                                <input type="radio" name="rating" value="4"/>
+                                                <svg class="icon icon-star ">
+                                                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#star"></use>
+                                                </svg>
+                                            </div>
+                                            <div class="form-wrap__star star-js">
+                                                <input type="radio" name="rating" value="5"/>
+                                                <svg class="icon icon-star ">
+                                                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#star"></use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-wrap__inputs-block">
+                                        <div class="form-wrap__input-wrap form-group">
+                                            <input
+                                                    name="name" value="{{ customer_name }}" id="input-name"
+                                                    class="form-wrap__input form-control" type="text"
+                                                    placeholder="{{ entry_name }}"/>
+                                        </div>
+
+                                        <div class="form-wrap__input-wrap form-group">
+                                            <textarea name="text" class="form-wrap__input form-control"
+                                                      placeholder="{{ entry_review }}"></textarea>
+                                        </div>
+                                    </div>
+                                    {{ captcha }}
+                                    <div class="form-wrap__btn-cont">
+                                        <button class="form-wrap__btn"
+                                                id="button-review" data-loading-text="{{ text_loading }}"
+                                                type="submit">{{ button_continue }}
+                                        </button>
+                                        {#                                                <div class="form-wrap__after-btn">Гарантируем конфидециальность ваших данных</div>#}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>
+
+{% if products %}
+    <section class="sBuyWith section" id="sBuyWith">
+        <div class="container">
+            <div class="section-title text-center">
+                <h2>Разом з цим товаром купують</h2>
+            </div>
+            <div class="sBuyWith__slider" id="RelatedSliderWrap">
+                <div class="swiper-container buy-with-slider-js" id="RelatedSlider">
+                    <div class="swiper-wrapper">
+                        {% for product in products %}
+
+                            <div class="swiper-slide">
+                                <a class="sBuyWith__slide-cont" href="{{ product['href'] }}">
+										<span class="sBuyWith__img">
+									<picture>
+										<img class="swiper-lazy" src="#" data-src="{{ product.thumb }}"
+                                             alt="{{ product.name }}"/>
+									</picture></span>
+                                    <span class="sBuyWith__txt">
+											<span class="sBuyWith__name">{{ product.name }}</span>
+
+                                            {% if product.price %}
+                                                                             <span class="sBuyWith__price">
+                                                           {% if not product.special %}
+                                                               {{ product.price }}
+                                                           {% else %}
+                                                               <span class="price-new">{{ product.special }}</span>
+                                                               <span class="price-old">{{ product.price }}</span>
+                                                           {% endif %}
+                                                                                 {% if product.tax %}
+                                                                                     <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+                                                                                 {% endif %}
+                                                      </span>
+                                            {% endif %}
+										</span>
+                                </a>
+                            </div>
+
+{#
+ <div class="swiper-slide">
+                                <div class="sBuyWith__slide-cont">
+                                    <a class="sBuyWith__img" href="{{ product['href'] }}">
+                                        <picture>
+                                            <img src="{{ product.thumb }}" alt="{{ product.name }}"
+                                                 title="{{ product.name }}" class="img-responsive"/>
+                                        </picture>
+                                    </a>
+                                    <div class="catalogItem__colors">
+
+                                        {% if product.Colir_Array['color'] %}
+                                            <div class="catalogItem__colorItem"
+                                                 style="background-color: {{ product.Colir_Array['color'] }};"></div>
+                                        {% endif %}
+                                        {% if product.color_products %}
+                                            {% for color_product in product.color_products %}
+                                                <a class="catalogItem__colorItem" href="{{ color_product['href'] }}"
+                                                   style="background-color: {{ color_product['color'] }};display: block;"></a>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                    </div>
+                                    <span class="sBuyWith__txt">
+                                    <a href="" class="sBuyWith__name">{{ product.name }}</a>
+
+                                    <div class="catalogItem__memoryWrap">
+
+                                       {% if product.array_products %}
+
+                                           {% for item in product.array_products %}
+                                               {% if item.href %}
+
+                                                   <a class="prod-chars__memory-item" href="{{ item.href }}">
+                                                    <label>
+                                                        <div class="memory-item ">{{ item.array }}</div>
+                                                    </label>
+                                                </a>
+
+                                               {% else %}
+                                                   <div class="prod-chars__memory-item">
+                                                    <label>
+                                                        <div style="background-color: rgb(116 220 0);"
+                                                             class="memory-item active">{{ item.array }}</div>
+                                                    </label>
+                                                </div>
+                                               {% endif %}
+
+                                           {% endfor %}
+                                       {% endif %}
+
+                                    </div>
+
+                                    {% if product.price %}
+                                        <span class="sBuyWith__price">
+                                                           {% if not product.special %}
+                                                               {{ product.price }}
+                                                           {% else %}
+                                                               <span class="price-new">{{ product.special }}</span>
+                                                               <span class="price-old">{{ product.price }}</span>
+                                                           {% endif %}
+                                            {% if product.tax %}
+                                                <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+                                            {% endif %}
+                                                      </span>
+                                    {% endif %}
+                                </span>
+                                </div>
+
+                            </div>
+#}
+
+
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <div class="swiper-prev-frame buy-with-prev">
+                    <svg class="icon icon-chevron-left ">
+                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-left"></use>
+                    </svg>
+                </div>
+                <div class="swiper-next-frame buy-with-next">
+                    <svg class="icon icon-chevron-right ">
+                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-right"></use>
+                    </svg>
+                </div>
+                <div class="swiper-pugin-frame buy-with-pugin d-md-none"></div>
+            </div>
+        </div>
+    </section>
+{% endif %}
+{{ content_bottom }}
+<div class="modal-win" id="modal-basket" style="display: none">
+    <div class="modal-win__title text-center">
+        Додано в кошик
+    </div>
+    <div class="modal-win__youOrder">
+        <div class="row" id="CartPopup">
+        </div>
+    </div>
+    <div class="modal-win__links">
+        <button class="modal-win__proceed" type="button" data-fancybox-close="" title="Закрыть">
+            Продовжити покупки
+        </button>
+        <a class="modal-win__toBasket" href="{{ cartLink }}">Перейти в корзину</a>
+    </div>
+    {% if products %}
+        <section class="sBuyWith section d-none d-lg-block" id="sBuyWith">
+            <div class="container">
+                <div class="section-title text-center">
+                    <h2>Разом з цим товаром купують</h2>
+                </div>
+                <div class="sBuyWith__slider" id="CartSliderWrap">
+                    <div class="swiper-container buy-with-slider-js buy-with-slider-js" id="CartSlider">
+                        <div class="swiper-wrapper">
+                            {% for product in products %}
+                                <div class="swiper-slide">
+                                    <a class="sBuyWith__slide-cont" href="{{ product['href'] }}">
+                                        <span class="sBuyWith__img">
+									     <picture>
+                                               <img class="" src="{{ product['thumb'] }}" alt="{{ product['name'] }}"/>
+									       </picture>
+                                        </span>
+                                        <span class="sBuyWith__txt">
+                                            <span class="sBuyWith__name">{{ product['name'] }}</span>
+                                            <span class="sBuyWith__price">{{ product['price'] }}</span>
+                                        </span>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="swiper-prev-frame buy-with-prev buy-with-prev">
+                        <svg class="icon icon-chevron-left ">
+                            <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-left"></use>
+                        </svg>
+                    </div>
+                    <div class="swiper-next-frame buy-with-next buy-with-next ">
+                        <svg class="icon icon-chevron-right ">
+                            <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-right"></use>
+                        </svg>
+                    </div>
+                    <div class="swiper-pugin-frame buy-with-pugin d-md-none"></div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+</div>
+
+<script type="text/javascript">
+    <!--
+    $('select[name=\'recurring_id\'], input[name="quantity"]').change(function () {
+        $.ajax({
+            url: 'index.php?route=product/product/getRecurringDescription',
+            type: 'post',
+            data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
+            dataType: 'json',
+            beforeSend: function () {
+                $('#recurring-description').html('');
+            },
+            success: function (json) {
+                $('.alert-dismissible, .text-danger').remove();
+
+                if (json['success']) {
+                    $('#recurring-description').html(json['success']);
+                }
+            }
+        });
+    });
+    //--></script>
+<script type="text/javascript"><!--
+
+    jQuery(document).ready(function ($) {
+
+        var buyWithSlider = new Swiper('#CartSlider', {
+            slidesPerColumnFill: 'row',
+            breakpoints: {
+                1: {
+                    spaceBetween: 15,
+                    slidesPerView: 2,
+                    slidesPerColumn: 2
+                },
+                575: {
+                    slidesPerColumn: 2,
+                    slidesPerView: 2,
+                    spaceBetween: 15
+                },
+                768: {
+                    slidesPerView: 3,
+                    slidesPerColumn: 1,
+                    spaceBetween: 20
+                },
+                1200: {
+                    slidesPerView: 4,
+                    slidesPerColumn: 1,
+                    spaceBetween: 30
+                }
+            },
+            pagination: {
+                el: $(this).find('.buy-with-pugin'),
+                clickable: true
+            },
+            //nav
+            navigation: {
+                nextEl: $('.buy-with-next', $('#CartSliderWrap')),
+                prevEl: $('.buy-with-prev2', $('#CartSliderWrap'))
+            },
+            lazy: {
+                loadPrevNext: true,
+                loadPrevNextAmount: 4
+            }
+        });
+        $('#button-cart,#triggerButtonCartProduct').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'index.php?route=checkout/cart/add',
+                type: 'post',
+                data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
+                dataType: 'json',
+                beforeSend: function () {
+                    $('#button-cart').button('loading');
+                },
+                complete: function () {
+                    $('#button-cart').button('reset');
+                },
+                success: function (json) {
+
+                    $('.alert-dismissible, .text-danger').remove();
+                    $('.form-group').removeClass('has-error');
+
+                    if (json['error']) {
+                        if (json['error']['option']) {
+                            for (i in json['error']['option']) {
+                                var element = $('#input-option' + i.replace('_', '-'));
+
+                                if (element.parent().hasClass('input-group')) {
+                                    element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                                } else {
+                                    element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                                }
+                            }
+                        }
+                        if (json['error']['recurring']) {
+                            $('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+                        }
+                        $('.text-danger').parent().addClass('has-error');
+                    }
+
+                    if (json['success']) {
+                        $('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
+                        // $('html, body').animate({scrollTop: 0}, 'slow');
+                        $('#cart').load('index.php?route=common/cart/info');
+                        $('#CartPopup').load('index.php?route=common/ajax/cart');
+                        setTimeout(function () {
+                            buyWithSlider.update();
+                        }, 100)
+                        $.fancybox.open({
+                            src: '#modal-basket',
+                            type: 'inline',
+                        });
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        });
+
+
+    });
+
+
+    //--></script>
+<script type="text/javascript"><!--
+    $('.date').datetimepicker({
+        language: '{{ datepicker }}',
+        pickTime: false
+    });
+
+    $('.datetime').datetimepicker({
+        language: '{{ datepicker }}',
+        pickDate: true,
+        pickTime: true
+    });
+
+    $('.time').datetimepicker({
+        language: '{{ datepicker }}',
+        pickDate: false
+    });
+
+    $('button[id^=\'button-upload\']').on('click', function () {
+        var node = this;
+
+        $('#form-upload').remove();
+
+        $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+        $('#form-upload input[name=\'file\']').trigger('click');
+
+        if (typeof timer != 'undefined') {
+            clearInterval(timer);
+        }
+
+        timer = setInterval(function () {
+            if ($('#form-upload input[name=\'file\']').val() != '') {
+                clearInterval(timer);
+
+                $.ajax({
+                    url: 'index.php?route=tool/upload',
+                    type: 'post',
+                    dataType: 'json',
+                    data: new FormData($('#form-upload')[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $(node).button('loading');
+                    },
+                    complete: function () {
+                        $(node).button('reset');
+                    },
+                    success: function (json) {
+                        $('.text-danger').remove();
+
+                        if (json['error']) {
+                            $(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+                        }
+
+                        if (json['success']) {
+                            alert(json['success']);
+
+                            $(node).parent().find('input').val(json['code']);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+        }, 500);
+    });
+    //--></script>
+<script type="text/javascript">
+    <!--
+
+    $('#review').delegate('.pagination a', 'click', function (e) {
+        e.preventDefault();
+        $('#review').fadeOut('slow');
+        $('#review').load(this.href);
+        $('#review').fadeIn('slow');
+    });
+    $('#review').load('index.php?route=product/product/review&product_id={{ product_id }}');
+    $('#button-review').on('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'index.php?route=product/product/write&product_id={{ product_id }}',
+            type: 'post',
+            dataType: 'json',
+            data: $("#form-review").serialize(),
+            beforeSend: function () {
+                $('#button-review').button('loading');
+            },
+            complete: function () {
+                $('#button-review').button('reset');
+            },
+            success: function (json) {
+                $('.alert-dismissible').remove();
+
+                if (json['error']) {
+                    $('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+                }
+
+                if (json['success']) {
+
+                    $('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+                    $('input[name=\'name\']').val('');
+                    $('textarea[name=\'text\']').val('');
+                    $('input[name=\'rating\']:checked').prop('checked', false);
+
+                }
+            }
+        });
+    });
+
+    //--></script>
+{{ footer }} 

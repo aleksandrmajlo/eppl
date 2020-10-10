@@ -1,0 +1,260 @@
+{{ header }}
+<div class="pageHead">
+    <div class="pageHead__wrap">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+{{ content_top }}
+<div class="container" id="content">
+    <div class="row">
+        {% if  column_left %}
+        <div class="col-lg-3">
+            {{ column_left }}
+        </div>
+        {% endif %}
+
+        <div class="col">
+            <section class="sCatalog section" id="sCatalog">
+                <div class="">
+                    <h1>{{ heading_title }}</h1>
+                </div>
+                <label class="control-label" for="input-search">{{ entry_search }}</label>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="text" name="search" value="{{ search }}" placeholder="{{ text_keyword }}" id="input-search" class="form-control" />
+                    </div>
+                    <div class="col-sm-3">
+                        <select name="category_id" class="form-control">
+                            <option value="0">{{ text_category }}</option>
+                            {% for category_1 in categories %}
+                                {% if category_1.category_id == category_id %}
+                                    <option value="{{ category_1.category_id }}" selected="selected">{{ category_1.name }}</option>
+                                {% else %}
+                                    <option value="{{ category_1.category_id }}">{{ category_1.name }}</option>
+                                {% endif %}
+                                {% for category_2 in category_1.children %}
+                                    {% if category_2.category_id == category_id %}
+                                        <option value="{{ category_2.category_id }}" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ category_2.name }}</option>
+                                    {% else %}
+                                        <option value="{{ category_2.category_id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ category_2.name }}</option>
+                                    {% endif %}
+                                    {% for category_3 in category_2.children %}
+                                        {% if category_3.category_id == category_id %}
+                                            <option value="{{ category_3.category_id }}" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ category_3.name }}</option>
+                                        {% else %}
+                                            <option value="{{ category_3.category_id }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ category_3.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="checkbox-inline">
+                            {% if sub_category %}
+                                <input type="checkbox" name="sub_category" value="1" checked="checked" />
+                            {% else %}
+                                <input type="checkbox" name="sub_category" value="1" />
+                            {% endif %}
+                            {{ text_sub_category }}</label>
+                    </div>
+                </div>
+                <p>
+                    <label class="checkbox-inline">
+                        {% if description %}
+                            <input type="checkbox" name="description" value="1" id="description" checked="checked" />
+                        {% else %}
+                            <input type="checkbox" name="description" value="1" id="description" />
+                        {% endif %}
+                        {{ entry_description }}</label>
+                </p>
+                <input type="button" value="{{ button_search }}" id="button-search" class="btn btn-primary" />
+                <h2>{{ text_search }}</h2>
+
+
+                {% if products %}
+                    <div class="sCatalog__sortWrap d-flex align-content-center flex-lg-nowrap">
+                        <p>{{ text_sort }}</p>
+                        <select id="input-sort" class="form-control" onchange="location = this.value;">
+                            {% for sorts in sorts %}
+                                {% if sorts.value == '%s-%s'|format(sort, order) %}
+                                    <option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+                                {% else %}
+                                    <option value="{{ sorts.href }}">{{ sorts.text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        {% for product in products %}
+                            <div class="col-6 col-lg-4">
+                                <div class="catalogItem">
+                                    <div class="catalogItem__imgWrap">
+
+                                        <a href="{{ product.href }}">
+                                            <picture class="lazy">
+                                                <img src="#" data-src="{{ product.thumb }}" alt="{{ product.name }}"
+                                                     title="{{ product.name }}"/>
+                                            </picture>
+                                        </a>
+                                        <div class="catalogItem__colors">
+
+                                            {% if product.Colir_Array['color'] %}
+                                                <div class="catalogItem__colorItem"
+                                                     style="background-color: {{ product.Colir_Array['color'] }};"></div>
+                                            {% endif %}
+
+
+                                            {% if product.color_products %}
+                                                {% for color_product in product.color_products %}
+                                                    <a class="catalogItem__colorItem" href="{{ color_product['href'] }}"
+                                                       style="background-color: {{ color_product['color'] }};display: block;"></a>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+                                    <a class="catalogItem__title" href="{{ product.href }}">{{ product.name }}</a>
+                                    <div class="catalogItem__memoryWrap">
+
+                                        {% if product.Colir_Array['color'] %}
+                                            <a class="catalogItem__memory active"
+                                               style="background-color: rgb(116 220 0);" onclick="return false;"
+                                               href="#">{{ product.Colir_Array['array'] }}</a>
+                                        {% endif %}
+
+                                        {% if product.array_products %}
+                                            {% for array_product in product.array_products %}
+                                                <a class="catalogItem__memory active"
+                                                   href="{{ array_product.href }}">{{ array_product['array'] }}</a>
+                                            {% endfor %}
+
+                                        {% endif %}
+
+
+                                    </div>
+                                    <div class="catalogItem__priceWrap">
+
+                                        {% if product.price %}
+                                            {% if not product.special %}
+                                                <div class="catalogItem__price">
+                                                    {{ product.price }}
+                                                </div>
+                                            {% else %}
+                                                <div class="catalogItem__price">
+                                                    {{ product.special }}
+                                                </div>
+                                                <div class="catalogItem__oldPrice">
+                                                    {{ product.price }}
+                                                </div>
+
+                                            {% endif %}
+                                            {% if product.tax %}
+                                                <div class="catalogItem__price">
+                                                    {{ text_tax }} {{ product.tax }}
+                                                </div>
+                                            {% endif %}
+
+                                        {% endif %}
+
+
+                                    </div>
+                                    <div class="catalogItem__buttonsWrap">
+                                        <div class="row justify-content-center align-items-center">
+                                            <div class="col-sm">
+                                                <a class="catalogItem__btn"
+                                                   onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');return false;"
+                                                   href="#">{{ button_cart }}
+                                                </a>
+                                            </div>
+                                            <div class="col-2 order-sm-first text-right">
+                                                <button onclick="compare.add('{{ product.product_id }}');"
+                                                        class="catalogItem__busket" type="button">
+                                                    <svg class="icon icon-basket ">
+                                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#basket"></use>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-2">
+                                                <button class="catalogItem__like"
+                                                        onclick="wishlist.add('{{ product.product_id }}');"
+                                                        type="button">
+                                                    <svg class="icon icon-heart ">
+                                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#heart"></use>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {{ pagination }}
+                {% else %}
+                    <p>{{ text_empty }}</p>
+                {% endif %}
+
+            </section>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"><!--
+    $('#button-search').bind('click', function() {
+        url = 'index.php?route=product/search';
+
+        var search = $('#content input[name=\'search\']').prop('value');
+
+        if (search) {
+            url += '&search=' + encodeURIComponent(search);
+        }
+
+        var category_id = $('#content select[name=\'category_id\']').prop('value');
+
+        if (category_id > 0) {
+            url += '&category_id=' + encodeURIComponent(category_id);
+        }
+
+        var sub_category = $('#content input[name=\'sub_category\']:checked').prop('value');
+
+        if (sub_category) {
+            url += '&sub_category=true';
+        }
+
+        var filter_description = $('#content input[name=\'description\']:checked').prop('value');
+
+        if (filter_description) {
+            url += '&description=true';
+        }
+
+        location = url;
+    });
+
+    $('#content input[name=\'search\']').bind('keydown', function(e) {
+        if (e.keyCode == 13) {
+            $('#button-search').trigger('click');
+        }
+    });
+
+    $('select[name=\'category_id\']').on('change', function() {
+        if (this.value == '0') {
+            $('input[name=\'sub_category\']').prop('disabled', true);
+        } else {
+            $('input[name=\'sub_category\']').prop('disabled', false);
+        }
+    });
+
+    $('select[name=\'category_id\']').trigger('change');
+    --></script>
+{{ footer }}

@@ -1,0 +1,14 @@
+2020-09-30 9:22:37 - REQUEST: {"type":"POST","endpoint":"api\/campaign\/update","use_access_token":true,"content_type":"multipart\/form-data","data":{"target[0][campaign_name]":"Eppl Store","target[0][country]":"UA","target[0][status]":"active","target[0][budget]":15,"target[0][roas]":0,"target[0][feeds][0][language]":"uk","target[0][feeds][0][currency]":"UAH"}}
+2020-09-30 9:22:41 - RESPONSE: {"result":{"work":[{"language":"uk","currency":"UAH","countries":["UA"],"work_id":"1e8f5073dd328678e099fd8ee7ccd2c4"}]},"error":false,"message":null}
+2020-09-30 9:22:41 - REQUEST: {"type":"POST","endpoint":"api\/campaign\/status","use_access_token":true,"content_type":"multipart\/form-data","data":{"target[0][campaign_name]":"Eppl Store","target[0][status]":"active"}}
+2020-09-30 9:22:42 - RESPONSE: {"result":{"success":true},"error":false,"message":null}
+2020-09-30 9:22:42 - REQUEST: {"type":"POST","endpoint":"api\/verify\/is_claimed","use_access_token":true,"content_type":"multipart\/form-data","data":{"url_website":"https:\/\/eppl.store\/"}}
+2020-09-30 9:22:43 - RESPONSE: {"result":{"is_claimed":true},"error":false,"message":null}
+2020-09-30 9:28:48 - REQUEST: {"type":"POST","endpoint":"api\/verify\/is_claimed","use_access_token":true,"content_type":"multipart\/form-data","data":{"url_website":"https:\/\/eppl.store\/"}}
+2020-09-30 9:28:49 - RESPONSE: {"result":{"is_claimed":true},"error":false,"message":null}
+2020-09-30 9:39:03 - REQUEST: {"type":"POST","endpoint":"api\/verify\/is_claimed","use_access_token":true,"content_type":"multipart\/form-data","data":{"url_website":"https:\/\/eppl.store\/"}}
+2020-09-30 9:39:04 - RESPONSE: {"result":{"is_claimed":true},"error":false,"message":null}
+2020-09-30 19:52:45 - REQUEST: {"type":"POST","endpoint":"api\/verify\/is_claimed","use_access_token":true,"content_type":"multipart\/form-data","data":{"url_website":"https:\/\/eppl.store\/"}}
+2020-09-30 19:52:46 - RESPONSE: {"result":{"is_claimed":true},"error":false,"message":null}
+2020-09-30 19:52:46 - REQUEST: {"endpoint":"api\/report\/campaign&interval=LAST_30_DAYS","use_access_token":true}
+2020-09-30 19:52:47 - RESPONSE: {"result":{"campaign_report":"\"CAMPAIGN_PERFORMANCE_REPORT (Aug 31, 2020-Sep 29, 2020)\"\nCampaign,Impressions,Clicks,Cost,Conversions,Total conv. value\nEppl Store,0,0,0,0.00,0.00\nTotal,0,0,0,0.00,0.00\n"},"error":false,"message":null}

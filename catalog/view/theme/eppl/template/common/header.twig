@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]>
+<html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]>
+<html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ title }}</title>
+    <base href="{{ base }}"/>
+    {% if description %}
+        <meta name="description" content="{{ description }}"/>
+    {% endif %}
+    {% if keywords %}
+        <meta name="keywords" content="{{ keywords }}"/>
+    {% endif %}
+
+    <script src="catalog/view/theme/eppl/libs/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="catalog/view/theme/eppl/libs/swiper/css/swiper.min.css"/>
+    <link rel="stylesheet" href="catalog/view/theme/eppl/libs/ion-rangeslider/css/ion.rangeSlider.min.css"/>
+    <link rel="stylesheet" href="catalog/view/theme/eppl/libs/@fancyapps/fancybox/jquery.fancybox.min.css"/>
+    <link rel="stylesheet" href="catalog/view/theme/eppl/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="catalog/view/theme/eppl/css/simple.css"/>
+    <link rel="stylesheet" href="catalog/view/theme/eppl/css/main.min.css"/>
+    <link rel="stylesheet" href="catalog/view/theme/eppl/css/eppl.css"/>
+
+    <link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+    {#
+    <script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css" />
+    <link href="catalog/view/theme/default/stylesheet/stylesheet.css" rel="stylesheet">
+  #}
+    <script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    {% for style in styles %}
+        <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}"/>
+    {% endfor %}
+    {% for script in scripts %}
+        <script src="{{ script }}" type="text/javascript"></script>
+    {% endfor %}
+    <script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+    {% for link in links %}
+        <link href="{{ link.href }}" rel="{{ link.rel }}"/>
+    {% endfor %}
+    {% for analytic in analytics %}
+        {{ analytic }}
+    {% endfor %}
+    <style>
+        li.Blog{
+             display: none ;
+        }
+    </style>
+</head>
+<body class="{{ bodyclass }}">
+<!--[if lt IE 11]><p class="browsehappy container">К сожалению, вы используете устаревший браузер. Пожалуйста, <a
+        href="http://browsehappy.com/" target="_blank">обновите ваш браузер</a>, чтобы улучшить производительность,
+    качество отображаемого материала и повысить безопасность.</p><![endif]-->
+<div class="main-wrapper">
+    <div class="menu-mobile menu-mobile--js d-lg-none">
+        <div class="toggle-menu-mobile toggle-menu-mobile--js">
+            <span></span>
+        </div>
+        <div class="menu-mobile__inner">
+            {{ menuMobile }}
+            <div class="text-right"></div>
+        </div>
+    </div>
+    <header class="header" id="header">
+        <!-- start topLine-->
+        <div class="topLine">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-auto col">
+                        {% if logo %}
+                            <a class="topLine__logo" href="{{ home }}">
+                                <img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" />
+                            </a>
+                        {% else %}
+                            <a href="{{ home }}">{{ name }}</a>
+                        {% endif %}
+                    </div>
+                    <div class="col d-none d-lg-block">
+                        <ul>
+                            <li><a href="{{ home }}">Каталог</a></li>
+                            <li><a href="{{ about }}">Про нас</a></li>
+                            <li><a href="{{ contact }}">Контакти</a></li>
+                            <li><a href="{{ garantii }}">Гарантія на повернення</a></li>
+                            <li><a href="{{ dellivery }}">Оплата та доставка</a></li>
+                            <li class="dropdown" tabindex="0">
+                                <a class="link-modal d-none" href="#modal-entrance">
+                                    <svg class="icon icon-user ">
+                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#user"></use>
+                                    </svg>
+                                </a>
+                                {% if logged %}
+                                    <div class="dropdown-toggle">
+                                        <svg class="icon icon-user ">
+                                            <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#user"></use>
+                                        </svg>
+                                        <span class="d-none d-xl-inline">Особистий кабінет</span>
+                                    </div>
+                                    <div class="dropdown-menu">
+                                        <div class="topLine__lk">
+                                            <ul>
+                                                <li><a href="{{ account }}">{{ text_account }}</a></li>
+                                                <li><a href="{{ order }}">{{ text_order }}</a></li>
+                                                <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
+                                                <li><a href="{{ download }}">{{ text_download }}</a></li>
+                                            </ul>
+                                            <button data-href="{{ logout }}" class="topLine__exit" id="ButtonLogout" type="submit">
+                                                {{ text_logout }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="dropdown-toggle">
+                                        <svg class="icon icon-user ">
+                                            <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#user"></use>
+                                        </svg>
+                                        <span class="d-none d-xl-inline">Особистий кабінет</span>
+                                    </div>
+                                    <div class="dropdown-menu">
+                                        <div class="topLine__lk">
+                                            <ul>
+                                                <li><a class=" btn btn btn-outline-dark" href="{{ register }}">{{ text_register }}</a></li>
+                                                <li><a class="link-modal btn btn btn-outline-dark" href="#modal-reg" >{{ text_login }}</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="topLine__divider w-100 d-none d-lg-block"></div>
+
+                    <!-- поиск -->
+                    <div class="col-auto">
+                        <ul>
+                            <li class="dropdown dropdown--search" tabindex="0">
+                                <div class="dropdown-toggle">
+                                    <svg class="icon icon-search ">
+                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#search"></use>
+                                    </svg>
+                                </div>
+                                <div class="dropdown-menu">
+                                    <div class="container">
+                                        <div class="form-wrap" id="search">
+                                                <button class="form-wrap__btn" id="SubmitSearch" type="submit">
+                                                    <svg class="icon icon-search ">
+                                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#search"></use>
+                                                    </svg>
+                                                </button>
+                                                <div class="form-wrap__input-wrap form-group">
+                                                    <input class="form-wrap__input form-control"
+                                                           type="search"
+                                                           placeholder="Шо Ви шукаєте" name="search"/>
+                                                </div>
+                                        </div>
+                                        <div class="topLine__hints" id="resultSearch">
+                                        </div>
+
+{#
+    <div class="popularProd d-none">
+
+                                            <div class="row">
+                                                <div class="popularProd__col col">
+                                                    <a class="popularCategoryItem" href="#">
+                                                        <picture class="lazy">
+                                                            <source srcset="#"
+                                                                    data-srcset="/catalog/view/theme/eppl/img/@2x/webp/popularCategory-1.webp"
+                                                                    type="image/webp"/>
+                                                            <img src="#"
+                                                                 data-src="/catalog/view/theme/eppl/img/@2x/popularCategory-1.png"
+                                                                 alt=""/>
+                                                        </picture>
+                                                        <span class="popularCategoryItem__title">Наушники AirPods (2019) в зарядном футляре</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+#}
+
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- поиск -->
+
+                    <div class="topLine__col col d-none d-lg-block">
+                        {{ menu }}
+                    </div>
+                    <div class="col-auto">
+                        <ul>
+                            <li class="d-none d-sm-block">
+                                <a href="{{ wishlist }}">
+                                    <svg class="icon icon-heart ">
+                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#heart"></use>
+                                    </svg>
+                                </a></li>
+                            <li class="dropdown" tabindex="0">
+                                {{ cart }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-auto d-lg-none">
+                        <div class="toggle-menu-mobile toggle-menu-mobile--js">
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end topLine-->
+    </header>

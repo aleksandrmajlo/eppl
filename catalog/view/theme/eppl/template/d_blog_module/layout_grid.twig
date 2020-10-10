@@ -1,0 +1,11 @@
+<div class="bm-posts">
+    {% for post in posts %}
+        {% include template('d_blog_module/post_thumb') with post %}
+    {% endfor %}
+    <div class="bm-pagination">
+        <div class="row">
+            <div class="col-sm-6 text-left">{{ pagination }}</div>
+            <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+    </div>
+</div>

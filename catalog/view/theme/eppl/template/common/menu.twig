@@ -1,0 +1,30 @@
+{% if categories %}
+    <ul >
+        {% for category in categories %}
+{#            {{ if category.name == 'Blog' }}#}
+{#                {% set continue = true %}#}
+{#            {{ endif }}#}
+            {% if category.children %}
+                <li class="dropdown {{ category.name }}">
+                    <a href="{{ category.href }}" class="dropdown-toggle"
+                                        data-toggle="dropdown">{{ category.name }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu--mnu">
+                        <div class="topLine__dropMNU">
+                            {% for children in category.children|batch(category.children|length / category.column|round(1, 'ceil')) %}
+                                <ul>
+                                    {% for child in children %}
+                                        <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+                            <a class="topLine__singleLink" href="{{ category.href }}">{{ text_all }} {{ category.name }}</a>
+                        </div>
+                    </div>
+                </li>
+            {% else %}
+                <li><a href="{{ category.href }}">{{ category.name }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -1,0 +1,99 @@
+{{ header }}
+<div id="content" class="container">
+</div>
+
+
+<div class="headerBlock" id="headerBlock">
+    <div class="bannerSleder">
+        <div class="swiper-container bannerSleder-js">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="bannerSleder__slideWrap" style="background-color: #e6e6e6;">
+                        <div class="container">
+                            <div class="row">
+                                <div class="bannerSleder__picCol col-lg-6 order-lg-last">
+                                    <picture>
+                                        <img class="" src="/catalog/view/theme/eppl/img/@2x/banner.png" alt="">
+                                    </picture>
+                                </div>
+                                <div class="bannerSleder__col col-lg">
+                                    <picture>
+                                        <img class="" src="/catalog/view/theme/eppl/img/@2x/iphoneSE.png" alt="">
+                                    </picture>
+                                    <div class="section-title">
+                                        <div class="h1">Все, як ви любите</div>
+                                    </div>
+                                    <div class="bannerSleder__price">від 12 499 грн
+                                        <div class="bannerSleder__installmentPlan d-none d-lg-block">
+                                            Оплата частинами
+                                        </div>
+                                    </div>
+                                    <a class="bannerSleder__btn" href="https://eppl.store/iphone/iphone-se-2020">Купити</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+{#
+
+   <div class="swiper-slide">
+                    <div class="bannerSleder__slideWrap" style="background-color: #e6e6e6;">
+                        <div class="container">
+                            <div class="row">
+                                <div class="bannerSleder__picCol col-lg-6 order-lg-last">
+                                    <picture>
+                                        <img class="" src="/catalog/view/theme/eppl/img/@2x/banner.png" alt="">
+                                    </picture>
+                                </div>
+                                <div class="bannerSleder__col col-lg">
+                                    <picture>
+                                        <img class="" src="/catalog/view/theme/eppl/img/@2x/iphoneSE.png" alt="">
+                                    </picture>
+                                    <div class="section-title">
+                                        <div class="h1">Все, как вы любите</div>
+                                    </div>
+                                    <div class="bannerSleder__price">от 39 990 р
+                                        <div class="bannerSleder__installmentPlan d-none d-lg-block">Доступен в
+                                            рассрочку
+                                        </div>
+                                    </div>
+                                    <a class="bannerSleder__btn" href="#">Купить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+#}
+
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    {% if banners %}
+        <div class="sliderCategory">
+            <div class="swiper-container sliderCategory-js">
+                <div class="swiper-wrapper">
+                    {% for banner in banners %}
+                        <div class="swiper-slide">
+                            <a class="sliderCategory__slideWrap" href="{{ banner.link }}">
+                                <picture>
+                                    <img class="" src="{{ banner.image }}"
+                                         alt="{{ banner.title }}">
+                                </picture>
+                                <span class="sliderCategory__title">{{ banner.title }}</span>
+                                <span class="sliderCategory__price">{{ banner.price }} </span>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-pagination d-lg-none"></div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{{ content_top }}
+{{ column_left }}
+{{ column_right }}
+{{ content_bottom }}
+{{ footer }}

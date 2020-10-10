@@ -1,0 +1,81 @@
+<div class="row">
+    {% for product in products %}
+
+        <div class="col-6 col-lg-3">
+            <div class="productItem">
+                <div class="productItem__heart" tabindex="0" onclick="wishlist.add('{{ product.product_id }}');">
+                    <svg class="icon icon-heart ">
+                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#heart"></use>
+                    </svg>
+                </div>
+                <a href="{{ product.href }}">
+                    <picture class="lazy">
+                        <img src="#" data-src="{{ product.thumb }}"  alt="{{ product.name }}" title="{{ product.name }}" />
+                    </picture>
+                </a>
+                <div class="catalogItem__colors">
+
+                    {% if product.Colir_Array['color'] %}
+                        <div class="catalogItem__colorItem"
+                             style="background-color: {{ product.Colir_Array['color'] }};"></div>
+                    {% endif %}
+
+
+                    {% if product.color_products %}
+                        {% for color_product in product.color_products %}
+                            <a class="catalogItem__colorItem" href="{{ color_product['href'] }}"
+                               style="background-color: {{ color_product['color'] }};display: block;"></a>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+                <a class="productItem__name" href="{{ product.href }}">
+                    {{ product.name }}
+                </a>
+                <div class="catalogItem__memoryWrap">
+
+                    {% if product.array_products %}
+
+                        {% for item in product.array_products %}
+                            {% if item.href %}
+
+                                <a class="prod-chars__memory-item" href="{{ item.href }}">
+                                    <label>
+                                        <div class="memory-item ">{{ item.array }}</div>
+                                    </label>
+                                </a>
+
+                            {% else %}
+                                <div class="prod-chars__memory-item">
+                                    <label>
+                                        <div style="background-color: rgb(116 220 0);"
+                                             class="memory-item active">{{ item.array }}</div>
+                                    </label>
+                                </div>
+                            {% endif %}
+
+                        {% endfor %}
+                    {% endif %}
+
+
+                </div>
+                {% if product.price %}
+                        {% if not product.special %}
+                          <div class="productItem__price"> {{ product.price }}</div>
+                        {% else %}
+                            <span class="price-new">{{ product.special }}</span>
+                            <span class="price-old">{{ product.price }}</span>
+                        {% endif %}
+                        {% if product.tax %}
+                            <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+                        {% endif %}
+                {% endif %}
+                <a class="productItem__btnBuy" onclick="cart.add('{{ product.product_id }}');return false;" href="#">{{ button_cart }}</a>
+                <a class="productItem__oneClick" href="#"  onclick="cart.oneclick({{ product_id }});return false;">Купити в 1 клік</a>
+            </div>
+        </div>
+
+    {% endfor %}
+</div>
+
+

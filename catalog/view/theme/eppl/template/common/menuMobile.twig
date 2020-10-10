@@ -1,0 +1,14 @@
+<ul class="navMenu" >
+    {% if categories %}
+        {% for category in categories %}
+            <li class="navMenu__item"><a class="navMenu__link" href="{{ category.href }}">{{ category.name }}</a></li>
+        {% endfor %}
+    {% endif %}
+    {% if linkBottom %}
+        {% for linkBottom_ in linkBottom  %}
+            <li class="navMenu__item" itemprop="item">
+                <a class="navMenu__link" href="{{ linkBottom_['href'] }}" itemprop="url">{{ linkBottom_['title'] }}</a>
+            </li>
+        {% endfor %}
+    {% endif %}
+</ul>
