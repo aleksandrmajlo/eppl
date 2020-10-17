@@ -28,11 +28,13 @@
 
       <div class="col">
 
-        <div class="section-title section-title--bonuses d-none d-lg-block">
-          <h1>{{ heading_title }}</h1>
+        <div class="section-title section-title--bonuses ">
+          <h1 class="d-none d-lg-block">{{ heading_title }}</h1>
           {{ text_message }}
           <div class="buttons">
-            <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+            <div class="pull-right">
+              <a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a>
+            </div>
           </div>
         </div>
 

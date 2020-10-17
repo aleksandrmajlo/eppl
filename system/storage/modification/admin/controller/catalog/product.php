@@ -1183,6 +1183,49 @@ class ControllerCatalogProduct extends Controller
 		}
        // по array !!!!!!!!!!!!!!!!!!!!!!!
 
+		// по size
+		if (isset($this->request->post['product_related_size'])) {
+			$products = $this->request->post['product_related_size'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$products = $this->model_catalog_product->getProductRelatedSize($this->request->get['product_id']);
+		} else {
+			$products = array();
+		}
+		$data['product_relateds_size'] = array();
+		foreach ($products as $product_id) {
+			$related_info = $this->model_catalog_product->getProduct($product_id);
+
+			if ($related_info) {
+				$data['product_relateds_size'][] = array(
+					'product_id' => $related_info['product_id'],
+					'name'       => $related_info['name']
+				);
+			}
+		}
+       // по size !!!!!!!!!!!!!!!!!!!!!!!
+
+
+		// по buy
+		if (isset($this->request->post['product_related_buy'])) {
+			$products = $this->request->post['product_related_buy'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$products = $this->model_catalog_product->getProductRelatedBuy($this->request->get['product_id']);
+		} else {
+			$products = array();
+		}
+		$data['product_relateds_buy'] = array();
+		foreach ($products as $product_id) {
+			$related_info = $this->model_catalog_product->getProduct($product_id);
+
+			if ($related_info) {
+				$data['product_relateds_buy'][] = array(
+					'product_id' => $related_info['product_id'],
+					'name'       => $related_info['name']
+				);
+			}
+		}
+       // по size !!!!!!!!!!!!!!!!!!!!!!!
+
 
 		if (isset($this->request->post['points'])) {
 			$data['points'] = $this->request->post['points'];

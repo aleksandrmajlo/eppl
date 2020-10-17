@@ -1,33 +1,39 @@
-.hidden{
-    display:none;
-}
-.img-responsive{
-     max-width: 100%;
-     height: auto;
+.hidden {
+  display: none;
 }
 
-.custom-input__text{
-     font-weight: 700;
+.img-responsive {
+  max-width: 100%;
+  height: auto;
 }
-#one-click button.fancybox-button{
-   width: auto !important;
+
+.custom-input__text {
+  font-weight: 700;
+}
+
+#one-click button.fancybox-button {
+  width: auto !important;
   max-width: 20px;
 }
 
-#ocfilter{
-     position: relative;
+#ocfilter {
+  position: relative;
 }
-.list-group-item.ocfilter-option.filter__item{
-     border:none;
+
+.list-group-item.ocfilter-option.filter__item {
+  border: none;
 }
-$colorSlider:#6fd200;
-.noUi-connect{
-     background:$colorSlider !important; 
+
+$colorSlider: #6fd200;
+.noUi-connect {
+  background: $colorSlider !important;
 }
-.noUi-horizontal{
-   height: 4px !important;
+
+.noUi-horizontal {
+  height: 4px !important;
 }
-.noUi-horizontal .noUi-handle{
+
+.noUi-horizontal .noUi-handle {
 
   width: .93333rem !important;
   height: .93333rem !important;
@@ -43,26 +49,50 @@ $colorSlider:#6fd200;
 .noUi-handle.noUi-handle-upper:before,
 .noUi-handle.noUi-handle-upper:after,
 .noUi-handle.noUi-handle-lower:before,
-.noUi-handle.noUi-handle-lower:after
-{
-   content: none !important;
+.noUi-handle.noUi-handle-lower:after {
+  content: none !important;
 }
-.popover.ocfilter-option-popover.fade.bottom.in{
+
+.popover.ocfilter-option-popover.fade.bottom.in {
   //margin-top: 40px !important;
-  .btn.btn-primary{
+  .btn.btn-primary {
     color: #ffffff;
   }
 
 }
-.noUi-pips.noUi-pips-horizontal{
-   display: none !important;
+
+.noUi-pips.noUi-pips-horizontal {
+  display: none !important;
 }
-.popover-content{
-     text-align: center;
+
+.popover-content {
+  text-align: center;
 }
-.description-tab{
-    img{
-        max-width: 100%;
-        height: auto;
-    }
+
+.description-tab {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.CartMiniPriceWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  &>div{
+      margin: 0 !important;
+  }
+  div.topLine__price{
+     margin-bottom: 5px !important;
+  }
+}
+
+@media (max-width: 720px)  {
+  .MobileMenuToggle{
+     .ButtonLogout{
+         margin-right: auto;
+     }
+  }
 }

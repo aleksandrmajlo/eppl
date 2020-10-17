@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Modification futuruted</name>
+    <code>eppreviewemailproduct</code>
+    <version>1.0</version>
+    <author>OpenCart Ltd</author>
+    <link>http://www.opencart.com</link>
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA[if (empty($this->request->post['rating'])]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                if (($this->request->post['email'] =="") || !filter_var($this->request->post['email'] , FILTER_VALIDATE_EMAIL)) {
+                   $json['error'] = 'Вкажіть email';
+               }
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+        <operation>
+            <search>
+                <![CDATA['author'     => $result['author'],]]>
+            </search>
+            <add position="before">
+                <![CDATA['email'     => $result['email'],]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/catalog/review.php">
+        <operation>
+            <search>
+                <![CDATA[author = '" . $this->db->escape($data['name']) . "',]]>
+            </search>
+            <add position="replace">
+                <![CDATA[author = '" . $this->db->escape($data['name']) . "', email = '" . $this->db->escape($data['email']) . "',]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="catalog/model/catalog/review.php">
+        <operation>
+            <search>
+                <![CDATA[, r.author]]>
+            </search>
+            <add position="replace">
+                <![CDATA[, r.author, r.email]]>
+            </add>
+        </operation>
+    </file>
+
+
+
+<!-- ********************************* admin ********************************-->
+
+    <file path="admin/model/catalog/review.php">
+        <operation>
+            <search>
+                <![CDATA[r.rating,]]>
+            </search>
+            <add position="replace">
+                <![CDATA[r.rating,r.email,]]>
+            </add>
+        </operation>
+    </file>
+
+
+    <file path="admin/model/catalog/review.php">
+        <operation>
+            <search>
+                <![CDATA[author = '" . $this->db->escape($data['author']) . "',]]>
+            </search>
+            <add position="replace">
+                <![CDATA[author = '" . $this->db->escape($data['author']) . "',email = '" . $this->db->escape($data['email']) . "',]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/catalog/review.php">
+        <operation>
+            <search>
+                <![CDATA['author'     => $result['author'],]]>
+            </search>
+            <add position="before">
+                <![CDATA['email'     => $result['email'],]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/catalog/review.php">
+        <operation>
+            <search>
+                <![CDATA[if ((utf8_strlen($this->request->post['author']) < 3)]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                 if (($this->request->post['email'] =="") || !filter_var($this->request->post['email'] , FILTER_VALIDATE_EMAIL)) {
+                    $this->error['email']= 'Вкажіть email';
+                 }
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+
+    <file path="admin/controller/catalog/review.php">
+        <operation>
+            <search>
+                <![CDATA[if (isset($this->request->post['author'])) {]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+
+                		if (isset($this->request->post['email'])) {
+			$data['email'] = $this->request->post['email'];
+		} elseif (!empty($review_info)) {
+			$data['email'] = $review_info['email'];
+		} else {
+			$data['email'] = '';
+		}
+
+                 ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/controller/catalog/review.php">
+        <operation>
+            <search>
+                <![CDATA[if (isset($this->error['author'])) {]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+
+		if (isset($this->error['email'])) {
+			$data['error_email'] = $this->error['email'];
+		} else {
+			$data['error_email'] = '';
+		}
+                 ]]>
+            </add>
+        </operation>
+    </file>
+
+
+
+    <file path="admin/view/template/catalog/review_list.twig">
+        <operation>
+            <search>
+                <![CDATA[<td class="text-right">{% if sort == 'r.rating' %}]]>
+            </search>
+            <add position="before">
+                <![CDATA[<td class="text-left">E-mail</td>]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/catalog/review_list.twig">
+        <operation>
+            <search>
+                <![CDATA[<td class="text-right">{{ review.rating }}</td>]]>
+            </search>
+            <add position="before">
+                <![CDATA[<td class="text-right">{{ review.email }}</td>]]>
+            </add>
+        </operation>
+    </file>
+
+
+
+    <file path="admin/view/template/catalog/review_form.twig">
+        <operation>
+            <search  index="1">
+                <![CDATA[<div class="form-group required">]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="input-email">Email</label>
+            <div class="col-sm-10">
+              <input type="text" name="email" value="{{ email }}" placeholder="email" id="input-email" class="form-control" />
+              {% if error_email %}
+              <div class="text-danger">{{ error_email }}</div>
+              {% endif %} </div>
+          </div>
+
+               ]]>
+            </add>
+        </operation>
+    </file>
+
+</modification>

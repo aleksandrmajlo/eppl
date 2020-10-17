@@ -1,4 +1,5 @@
 <?php
+
 class ControllerCommonAjax extends Controller {
 
     public function cart(){
@@ -12,9 +13,7 @@ class ControllerCommonAjax extends Controller {
             } else {
                 $image = '';
             }
-
             $option_data = array();
-
             foreach ($product['option'] as $option) {
                 if ($option['type'] != 'file') {
                     $value = $option['value'];
@@ -34,18 +33,15 @@ class ControllerCommonAjax extends Controller {
                     'type'  => $option['type']
                 );
             }
-
             // Display prices
             if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
                 $unit_price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
-
                 $price = $this->currency->format($unit_price, $this->session->data['currency']);
                 $total = $this->currency->format($unit_price * $product['quantity'], $this->session->data['currency']);
             } else {
                 $price = false;
                 $total = false;
             }
-
             $data['products'][] = array(
                 'cart_id'   => $product['cart_id'],
                 'thumb'     => $image,
@@ -60,7 +56,7 @@ class ControllerCommonAjax extends Controller {
             );
         }
 
-        $this->response->setOutput($this->load->view('common/ajax_cart', $data));
+        $this->response->setOutput($this->load->view('ajax/ajax_cart', $data));
     }
 
     public function oneclick(){
@@ -86,7 +82,8 @@ class ControllerCommonAjax extends Controller {
             $this->db->query("INSERT INTO " . DB_PREFIX . "order SET telephone = '" . $this->db->escape($tel) . "',
                                            firstname = '" . $nameOne. "', 
                                            lastname = '" . $nameOne . "',
-                                           total = '" . (float) $total . "', date_added = NOW(),
+                                           total = '" . (float) $total . "', 
+                                            date_added = NOW(), date_modified = NOW(),
                                            currency_code = '" . $this->db->escape($currency_code) . "', 
                                            email = '" . $this->db->escape($email_random) . "',
                                            comment='Купити в 1 клік', order_status_id='1'");
@@ -156,6 +153,58 @@ class ControllerCommonAjax extends Controller {
                 }
                 echo json_encode($data['products']);
             }
+        }
+
+    }
+
+    // загрузка товар с ним покупают в модалку
+    public  function related(){
+        $product_id = $this->request->post['product_id'];
+        if($product_id){
+            $this->load->model('catalog/product');
+            $this->load->model('tool/image');
+            $results = $this->model_catalog_product->getProductRelated($product_id);
+            $data['products'] = array();
+            foreach ($results as $result) {
+                if ($result['image']) {
+                    $image = $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_height'));
+                } else {
+                    $image="";
+                }
+                if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+                    $price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+                } else {
+                    $price = false;
+                }
+                if ((float)$result['special']) {
+                    $special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+                } else {
+                    $special = false;
+                }
+                if ($this->config->get('config_tax')) {
+                    $tax = $this->currency->format((float)$result['special'] ? $result['special'] : $result['price'], $this->session->data['currency']);
+                } else {
+                    $tax = false;
+                }
+                if ($this->config->get('config_review_status')) {
+                    $rating = (int)$result['rating'];
+                } else {
+                    $rating = false;
+                }
+                $data['products'][] = array(
+                    'product_id'  => $result['product_id'],
+                    'thumb'       => $image,
+                    'name'        => $result['name'],
+                    'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',
+                    'price'       => $price,
+                    'special'     => $special,
+                    'tax'         => $tax,
+                    'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
+                    'rating'      => $rating,
+                    'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'])
+                );
+            }
+            $this->response->setOutput($this->load->view('ajax/ajax_related', $data));
         }
 
     }

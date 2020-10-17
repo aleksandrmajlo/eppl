@@ -1,6 +1,7 @@
 <?php
 class ControllerCommonMenuMobile extends Controller {
     public function index() {
+        $this->load->language('common/header');
         $this->load->language('common/menu');
         // Menu
         $this->load->model('catalog/category');
@@ -36,7 +37,7 @@ class ControllerCommonMenuMobile extends Controller {
 
         $this->load->model('catalog/information');
         $data['linkBottom']=[];
-        $PageMobiles=[4,['information/contact','Контакти'],5];
+        $PageMobiles=[4,['information/contact','Контакти'],5,6,9];
         foreach ($PageMobiles as $pageMobile){
             if(is_numeric($pageMobile)){
                 $article=$this->model_catalog_information->getInformation($pageMobile);
@@ -51,6 +52,18 @@ class ControllerCommonMenuMobile extends Controller {
                 ] ;
             }
         }
+
+        $data['logged'] = $this->customer->isLogged();
+
+        $data['account'] = $this->url->link('account/account', '', true);
+        $data['register'] = $this->url->link('account/register', '', true);
+        $data['login'] = $this->url->link('account/login', '', true);
+        $data['order'] = $this->url->link('account/order', '', true);
+        $data['transaction'] = $this->url->link('account/transaction', '', true);
+        $data['download'] = $this->url->link('account/download', '', true);
+        $data['logout'] = $this->url->link('account/logout', '', true);
+
+        $data['dellivery'] = $this->url->link('information/information', 'information_id=' . 6);
 
         return $this->load->view('common/menuMobile', $data);
     }

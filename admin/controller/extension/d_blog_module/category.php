@@ -185,7 +185,6 @@ class ControllerExtensionDBlogModuleCategory extends Controller {
         $category_total = $this->model_extension_d_blog_module_category->getTotalCategories();
 
         $results = $this->model_extension_d_blog_module_category->getCategories($filter_data);
-
         foreach ($results as $result) {
 
             $data['categories'][] = array(

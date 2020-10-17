@@ -98,7 +98,9 @@
 
                 <div class="prod-chars">
 
-                    <div class="prod-chars__chb-items">
+                     {#    верхняя панель цвет размер накопитель артикул  start               #}
+                    <div class="prod-chars__top-items">
+
                         <div class="prod-chars__item">
                             <div class="prod-chars__title">
                                 Артикул:
@@ -111,7 +113,6 @@
                         </div>
                         {% if Colir_Array['colir'] is not empty %}
                             <div class="prod-chars__item">
-
                                 <div class="prod-chars__title">
                                     Колір:
                                 </div>
@@ -137,6 +138,7 @@
                                 </div>
                             </div>
                         {% endif %}
+
                         {% if resulArray is not empty %}
                             <div class="prod-chars__item">
                                 <div class="prod-chars__title">Пам'ять:
@@ -168,7 +170,84 @@
                                 </div>
                             </div>
                         {% endif %}
+
+                        {% if resulSize is not empty %}
+                            <div class="prod-chars__item">
+                                <div class="prod-chars__title">Розмір:
+                                </div>
+                                <div class="prod-chars__content">
+                                    <div class="prod-chars__memory-list">
+                                        {% for item in  resulSize %}
+
+                                            {% if item.href %}
+
+                                                <a class="prod-chars__memory-item" href="{{ item.href }}">
+                                                    <label>
+                                                        <div class="memory-item ">{{ item.array }}</div>
+                                                    </label>
+                                                </a>
+
+                                            {% else %}
+                                                <div class="prod-chars__memory-item">
+                                                    <label>
+                                                        <div style="background-color: rgb(116 220 0);"
+                                                             class="memory-item active">{{ item.array }}</div>
+                                                    </label>
+                                                </div>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+
+
                     </div>
+                    {#    верхняя панель цвет размер накопитель артикул  end               #}
+
+                    {#    рекомендуем к покупке  start               #}
+                    {% if buys %}
+                        <div class="prod-chars__chb-items" id="BuysConteer">
+
+                            {% for buy in buys  %}
+                                <div class="prod-chars__chb-item">
+                                    <label>
+                                        <input type="checkbox" name="buys[]" value="{{buy.product_id  }}" data-min="{{ buy.minimum }}"/>
+                                        <div class="checkbox-cont"></div>
+                                        <div class="chb-txt">
+                                              {{ buy.name }}
+                                        </div>
+                                        {% if buy.price %}
+                                            {% if not buy.special %}
+                                                <div class="price">
+                                                    {{ buy.price }}
+                                                </div>
+                                            {% else %}
+                                                <div class="price">
+                                                    {{ buy.special }}
+                                                </div>
+                                                <div class="catalogItem__oldPrice">
+                                                    {{ buy.price }}
+                                                </div>
+                                            {% endif %}
+                                            {% if buy.tax %}
+                                                <div class="price">
+                                                    {{ text_tax }} {{ buy.tax }}
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {#    рекомендуем к покупке  end               #}
+
+
                     {% if options %}
                         <div class="prod-chars__chb-items">
                             {% for option in options %}
@@ -329,10 +408,8 @@
                         <input type="text" name="quantity" value="{{ minimum }}" size="2" id="input-quantity"
                                class="form-control"/>
                         <input type="hidden" name="product_id" value="{{ product_id }}"/>
-                        <br/>
-                        <button type="button" style="display: none;" id="button-cart"
-                                data-loading-text="{{ text_loading }}"
-                                class="btn btn-primary btn-lg btn-block">{{ button_cart }}</button>
+
+
                     </div>
                     {% if minimum > 1 %}
                         <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ text_minimum }}</div>
@@ -365,14 +442,14 @@
                             </div>
                         {% endif %}
 
-                        <a class="prod-chars__to-bag-btn "
-                           id="triggerButtonCartProduct"
-                           href="#">
+                        <button class="prod-chars__to-bag-btn "
+                                data-loading-text="{{ text_loading }}"
+                           id="button-cart">
                             <svg class="icon icon-shopping-bag ">
                                 <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#shopping-bag"></use>
                             </svg>
                             <span>{{ button_cart }}</span>
-                        </a>
+                        </button>
                         <a class="prod-chars__click-btn" onclick="cart.oneclick({{ product_id }});return false;"
                            href="#">
                             Купити в 1 клік
@@ -387,8 +464,6 @@
         </div>
     </div>
 </div>
-
-
 <div class="sProdDescr section" id="sProdDescr">
     <div class="sProdDescr__container container">
         <div class="tabs">
@@ -509,11 +584,19 @@
                                         </div>
                                     </div>
                                     <div class="form-wrap__inputs-block">
+
                                         <div class="form-wrap__input-wrap form-group">
                                             <input
                                                     name="name" value="{{ customer_name }}" id="input-name"
                                                     class="form-wrap__input form-control" type="text"
                                                     placeholder="{{ entry_name }}"/>
+                                        </div>
+
+                                        <div class="form-wrap__input-wrap form-group">
+                                            <input
+                                                    name="email" value="" id="input-email"
+                                                    class="form-wrap__input form-control" type="text"
+                                                    placeholder="E-mail"/>
                                         </div>
 
                                         <div class="form-wrap__input-wrap form-group">
@@ -540,7 +623,6 @@
     </div>
 </div>
 </div>
-
 {% if products %}
     <section class="sBuyWith section" id="sBuyWith">
         <div class="container">
@@ -550,6 +632,7 @@
             <div class="sBuyWith__slider" id="RelatedSliderWrap">
                 <div class="swiper-container buy-with-slider-js" id="RelatedSlider">
                     <div class="swiper-wrapper">
+
                         {% for product in products %}
 
                             <div class="swiper-slide">
@@ -578,80 +661,6 @@
 										</span>
                                 </a>
                             </div>
-
-{#
- <div class="swiper-slide">
-                                <div class="sBuyWith__slide-cont">
-                                    <a class="sBuyWith__img" href="{{ product['href'] }}">
-                                        <picture>
-                                            <img src="{{ product.thumb }}" alt="{{ product.name }}"
-                                                 title="{{ product.name }}" class="img-responsive"/>
-                                        </picture>
-                                    </a>
-                                    <div class="catalogItem__colors">
-
-                                        {% if product.Colir_Array['color'] %}
-                                            <div class="catalogItem__colorItem"
-                                                 style="background-color: {{ product.Colir_Array['color'] }};"></div>
-                                        {% endif %}
-                                        {% if product.color_products %}
-                                            {% for color_product in product.color_products %}
-                                                <a class="catalogItem__colorItem" href="{{ color_product['href'] }}"
-                                                   style="background-color: {{ color_product['color'] }};display: block;"></a>
-                                            {% endfor %}
-                                        {% endif %}
-
-                                    </div>
-                                    <span class="sBuyWith__txt">
-                                    <a href="" class="sBuyWith__name">{{ product.name }}</a>
-
-                                    <div class="catalogItem__memoryWrap">
-
-                                       {% if product.array_products %}
-
-                                           {% for item in product.array_products %}
-                                               {% if item.href %}
-
-                                                   <a class="prod-chars__memory-item" href="{{ item.href }}">
-                                                    <label>
-                                                        <div class="memory-item ">{{ item.array }}</div>
-                                                    </label>
-                                                </a>
-
-                                               {% else %}
-                                                   <div class="prod-chars__memory-item">
-                                                    <label>
-                                                        <div style="background-color: rgb(116 220 0);"
-                                                             class="memory-item active">{{ item.array }}</div>
-                                                    </label>
-                                                </div>
-                                               {% endif %}
-
-                                           {% endfor %}
-                                       {% endif %}
-
-                                    </div>
-
-                                    {% if product.price %}
-                                        <span class="sBuyWith__price">
-                                                           {% if not product.special %}
-                                                               {{ product.price }}
-                                                           {% else %}
-                                                               <span class="price-new">{{ product.special }}</span>
-                                                               <span class="price-old">{{ product.price }}</span>
-                                                           {% endif %}
-                                            {% if product.tax %}
-                                                <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
-                                            {% endif %}
-                                                      </span>
-                                    {% endif %}
-                                </span>
-                                </div>
-
-                            </div>
-#}
-
-
 
                         {% endfor %}
 
@@ -729,7 +738,6 @@
         </section>
     {% endif %}
 </div>
-
 <script type="text/javascript">
     <!--
     $('select[name=\'recurring_id\'], input[name="quantity"]').change(function () {
@@ -793,8 +801,27 @@
                 loadPrevNextAmount: 4
             }
         });
-        $('#button-cart,#triggerButtonCartProduct').on('click', function (e) {
+
+        $('#button-cart').on('click', function (e) {
             e.preventDefault();
+            var ArBuys={};
+            $('[name="buys[]"]',$('#BuysConteer')).each(function(){
+                var $this=$(this);
+                if($this.prop('checked')){
+                    ArBuys[$this.val()]=$this.data('min')
+                    // ArBuys.push({
+                        // product_id:$this.val(),
+                        // minimum:$this.data('min')
+                    // })
+                }
+            })
+           
+            // console.log(ArBuys);
+            // console.log(objectLength);
+            // return;
+
+            
+        
             $.ajax({
                 url: 'index.php?route=checkout/cart/add',
                 type: 'post',
@@ -804,13 +831,11 @@
                     $('#button-cart').button('loading');
                 },
                 complete: function () {
-                    $('#button-cart').button('reset');
+                    //$('#button-cart').button('reset');
                 },
                 success: function (json) {
-
                     $('.alert-dismissible, .text-danger').remove();
                     $('.form-group').removeClass('has-error');
-
                     if (json['error']) {
                         if (json['error']['option']) {
                             for (i in json['error']['option']) {
@@ -828,22 +853,62 @@
                         }
                         $('.text-danger').parent().addClass('has-error');
                     }
-
                     if (json['success']) {
-                        $('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
-                        // $('html, body').animate({scrollTop: 0}, 'slow');
-                        $('#cart').load('index.php?route=common/cart/info');
-                        $('#CartPopup').load('index.php?route=common/ajax/cart');
-                        setTimeout(function () {
-                            buyWithSlider.update();
-                        }, 100)
-                        $.fancybox.open({
-                            src: '#modal-basket',
-                            type: 'inline',
-                        });
+                            var objectLength = Object.keys(ArBuys).length
+                            if(objectLength>0){
+                                $.ajax({
+                                    url: 'index.php?route=checkout/cart/adds',
+                                    type: 'post',
+                                    dataType:'json', 
+                                    data:{data: JSON.stringify(ArBuys)},
+                                    complete: function () {
+                                        $('#button-cart').button('reset');
+                                    },
+                                    success: function (json) {
+                                         $('#cart').load('index.php?route=common/cart/info');
+                                         $('#CartPopup').load('index.php?route=common/ajax/cart',function( response, status, xhr ){
+                                                 try{
+                                                    setTimeout(function(){
+                                                        buyWithSlider.update();
+                                                    },100)
+                                                   
+                                                 }catch(error){
+                                                     console.log(error)
+                                                 }
+                                                 $.fancybox.open({
+                                                     src: '#modal-basket',
+                                                     type: 'inline',
+                                                  });
+                                         });
+                                         // $('#button-cart').button('reset')
+                                    }
+                                })
+               
+                            }else{
+                                    // $('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
+                                    $('#cart').load('index.php?route=common/cart/info');
+                                    $('#CartPopup').load('index.php?route=common/ajax/cart',function( response, status, xhr ){
+                                            try{
+                                                
+                                               setTimeout(function(){
+                                                   buyWithSlider.update();
+                                               },100)
+                                               
+                                            }catch(error){
+                                            }
+                                            $.fancybox.open({
+                                                src: '#modal-basket',
+                                                type: 'inline',
+                                             });
+                                    });
+                                    $('#button-cart').button('reset');
+                           }
+
+
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
+                    $('#button-cart').button('reset');
                     alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
                 }
             });
@@ -948,18 +1013,15 @@
             },
             success: function (json) {
                 $('.alert-dismissible').remove();
-
                 if (json['error']) {
                     $('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
                 }
-
                 if (json['success']) {
-
                     $('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
                     $('input[name=\'name\']').val('');
+                    $('input[name=\'email\']').val('');
                     $('textarea[name=\'text\']').val('');
                     $('input[name=\'rating\']:checked').prop('checked', false);
-
                 }
             }
         });

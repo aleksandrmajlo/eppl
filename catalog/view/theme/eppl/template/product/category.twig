@@ -75,116 +75,9 @@
                     </div>
                     <div class="row">
                         {% for product in products %}
-
                             <div class="col-6 col-lg-4">
-                                <div class="catalogItem">
-                                    <div class="catalogItem__imgWrap">
-
-                                        <a href="{{ product.href }}">
-                                            <picture class="lazy">
-                                                <img src="#" data-src="{{ product.thumb }}" alt="{{ product.name }}"
-                                                     title="{{ product.name }}"/>
-                                            </picture>
-                                        </a>
-                                        <div class="catalogItem__colors">
-
-                                            {% if product.Colir_Array['color'] %}
-                                                <div class="catalogItem__colorItem"
-                                                     style="background-color: {{ product.Colir_Array['color'] }};"></div>
-                                            {% endif %}
-
-
-                                            {% if product.color_products %}
-                                                {% for color_product in product.color_products %}
-                                                    <a class="catalogItem__colorItem" href="{{ color_product['href'] }}"
-                                                       style="background-color: {{ color_product['color'] }};display: block;"></a>
-                                                {% endfor %}
-                                            {% endif %}
-
-                                        </div>
-
-                                    </div>
-                                    <a class="catalogItem__title" href="{{ product.href }}">{{ product.name }}</a>
-
-
-                                    {% if product.array_products %}
-                                        <div class="catalogItem__memoryWrap">
-                                            {% for item in product.array_products %}
-                                                {% if item.href %}
-
-                                                    <a class="catalogItem__memory" href="{{ item.href }}">
-                                                        {{ item.array }}
-                                                    </a>
-
-                                                {% else %}
-
-                                                    <a class="catalogItem__memory" href="#" onclick="return false;"
-                                                       style="background-color: rgb(116 220 0);">
-                                                        {{ item.array }}
-                                                    </a>
-                                                {% endif %}
-
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-
-
-                                    <div class="catalogItem__priceWrap">
-
-                                        {% if product.price %}
-                                            {% if not product.special %}
-                                                <div class="catalogItem__price">
-                                                    {{ product.price }}
-                                                </div>
-                                            {% else %}
-                                                <div class="catalogItem__price">
-                                                    {{ product.special }}
-                                                </div>
-                                                <div class="catalogItem__oldPrice">
-                                                    {{ product.price }}
-                                                </div>
-
-                                            {% endif %}
-                                            {% if product.tax %}
-                                                <div class="catalogItem__price">
-                                                    {{ text_tax }} {{ product.tax }}
-                                                </div>
-                                            {% endif %}
-
-                                        {% endif %}
-
-
-                                    </div>
-                                    <div class="catalogItem__buttonsWrap">
-                                        <div class="row justify-content-center align-items-center">
-                                            <div class="col-sm">
-                                                <a class="catalogItem__btn"
-                                                   onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');return false;"
-                                                   href="#">{{ button_cart }}
-                                                </a>
-                                            </div>
-                                            <div class="col-2 order-sm-first text-right">
-                                                <button onclick="compare.add('{{ product.product_id }}');"
-                                                        class="catalogItem__busket" type="button">
-                                                    <svg class="icon icon-basket ">
-                                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#basket"></use>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <div class="col-2">
-                                                <button class="catalogItem__like"
-                                                        onclick="wishlist.add('{{ product.product_id }}');"
-                                                        type="button">
-                                                    <svg class="icon icon-heart ">
-                                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#heart"></use>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {% include template('product/list_product') %}
                             </div>
-
                         {% endfor %}
                     </div>
                     {{ pagination }}
@@ -195,4 +88,44 @@
     </div>
 </div>
 {{ content_bottom }}
+<div class="modal-win" id="modal-basket" style="display: none">
+    <div class="modal-win__title text-center">
+        Додано в кошик
+    </div>
+    <div class="modal-win__youOrder">
+        <div class="row" id="CartPopup">
+        </div>
+    </div>
+    <div class="modal-win__links">
+        <button class="modal-win__proceed" type="button" data-fancybox-close="" title="Закрыть">
+            Продовжити покупки
+        </button>
+        <a class="modal-win__toBasket" href="{{ cartLink }}">Перейти в корзину</a>
+    </div>
+        <section class="sBuyWith section d-none d-lg-block" id="sBuyWith">
+            <div class="container">
+                <div class="section-title text-center">
+                    <h2>Разом з цим товаром купують</h2>
+                </div>
+                <div class="sBuyWith__slider" id="CartSliderWrapCat">
+                    <div class="swiper-container buy-with-slider-js buy-with-slider-js" id="CartSliderCat">
+                        <div class="swiper-wrapper" id="RealetedCategory">
+                        </div>
+                    </div>
+                    <div class="swiper-prev-frame buy-with-prev buy-with-prev">
+                        <svg class="icon icon-chevron-left ">
+                            <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-left"></use>
+                        </svg>
+                    </div>
+                    <div class="swiper-next-frame buy-with-next buy-with-next ">
+                        <svg class="icon icon-chevron-right ">
+                            <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-right"></use>
+                        </svg>
+                    </div>
+                    <div class="swiper-pugin-frame buy-with-pugin d-md-none"></div>
+                </div>
+            </div>
+        </section>
+</div>
+
 {{ footer }}

@@ -1,7 +1,7 @@
 /verstka
 /admin/config.php
 /image/cache
-/system/modification
+/system/storage
 /system/logs
 config.php
 .env

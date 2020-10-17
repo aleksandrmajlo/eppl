@@ -95,6 +95,11 @@ class ControllerCommonHeader extends Controller
             $data['bodyclass']='information';
         }
 
+        $actual_link = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        if($actual_link=='https://eppl.store/'||$actual_link=='https://eppl.store/index.php?route=common/home'){
+            $data['bodyclass']='home';
+        }
+
 
 		return $this->load->view('common/header', $data);
 	}

@@ -1,65 +1,78 @@
 <div id="cart">
     {% if products or vouchers %}
-        <a class="basket-block dropdown-toggle" href="{{ checkout }}">
+    <a class="basket-block dropdown-toggle" href="{{ checkout }}">
        <span class="basket-block__btn">
 			<svg class="icon icon-basket ">
 			   <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#basket"></use>
 			</svg>
            <span class="basket-block__count">{{ products|length }}</span>
           </span>
-        </a>
-        <div class="dropdown-menu dropdown-menu--basket">
-            <div class="topLine__basket">
-                <table>
-                    {% for product in products %}
-                        <tr>
-                            <td>
-                                <a class="topLine__imgWrap" href="{{ product.href }}">
-                                    <picture class="">
-                                        <source  srcset="{{ product.thumb }}"
-                                                type="image/webp"/>
-                                        <img   alt="{{ product.name }}" title="{{ product.name }}"
-                                             src="{{ product.thumb }}" />
-                                    </picture>
-                                </a>
-                            </td>
-                            <td>
-                                <div class="topLine__name">{{ product.name }}</div>
-                            </td>
-                            <td>
-                                <div class="topLine__price">{{ product.total }}</div>
-                            </td>
-                            <td>
-                                <button onclick="cart.remove('{{ product.cart_id }}','delete_new');"
-                                        class="topLine__btnCancel" type="submit">
-                                    <svg class="icon icon-cancel ">
-                                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#cancel"></use>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                <div class="topLine__basketFoot">
-                    <a class="topLine__basketBTN" href="{{ checkout }}">{{ text_checkout }}</a>
-                    {% for key,total in totals %}
-                        {% if key>0 %}
-                            <div class="topLine__totalPrice ">
-                                <span>{{ total.title }} :</span>
-                                {{ total.text }}
+    </a>
+    <div class="dropdown-menu dropdown-menu--basket">
+        <div class="topLine__basket">
+            <table>
+                {% for product in products %}
+                <tr>
+                    <td>
+                        <a class="topLine__imgWrap" href="{{ product.href }}">
+                            <picture class="">
+                                <img alt="{{ product.name }}" title="{{ product.name }}"
+                                     src="{{ product.thumb }}"/>
+                            </picture>
+                        </a>
+                    </td>
+                    <td>
+                        <div class="topLine__name">{{ product.name }}</div>
+                    </td>
+                    <td>
+                        {% if product.oldPriceCart %}
+                            <div class="CartMiniPriceWrap">
+                                <div class="topLine__price">
+                                    {{ product.price }}
+                                </div>
+                                <div class="catalogItem__oldPrice">
+                                    {{ product.oldPriceCart }}
+                                </div>
                             </div>
+                        {% else %}
+                                <div class="topLine__price">
+                                    {{ product.price }}
+                                </div>
                         {% endif %}
-                    {% endfor %}
-                </div>
+                    </td>
+                    {#                            <td>#}
+                    {#                                <div class="topLine__price">{{ product.total }}</div>#}
+                    {#                            </td>#}
+                    <td>
+                        <button onclick="cart.remove('{{ product.cart_id }}','delete_new');"
+                                class="topLine__btnCancel" type="submit">
+                            <svg class="icon icon-cancel ">
+                                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#cancel"></use>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="topLine__basketFoot">
+                <a class="topLine__basketBTN" href="{{ checkout }}">{{ text_checkout }}</a>
+                {% for key,total in totals %}
+                    {% if key>0 %}
+                        <div class="topLine__totalPrice ">
+                            <span>{{ total.title }} :</span>
+                            {{ total.text }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
+    </div>
     {% else %}
-        <a class="basket-block dropdown-toggle"  href="{{ checkout }}">
+        <a class="basket-block dropdown-toggle" href="{{ checkout }}">
        <span class="basket-block__btn">
 			<svg class="icon icon-basket ">
 			   <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#basket"></use>
 			</svg>
-{#           {{ text_empty }}#}
          <span class="basket-block__count">0</span>
        </span>
         </a>

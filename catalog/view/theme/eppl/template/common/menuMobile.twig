@@ -4,6 +4,7 @@
             <li class="navMenu__item"><a class="navMenu__link" href="{{ category.href }}">{{ category.name }}</a></li>
         {% endfor %}
     {% endif %}
+    <hr>
     {% if linkBottom %}
         {% for linkBottom_ in linkBottom  %}
             <li class="navMenu__item" itemprop="item">
@@ -11,4 +12,53 @@
             </li>
         {% endfor %}
     {% endif %}
+    <li class="navMenu__item" itemprop="item">
+        <a class="navMenu__link" href="/blog" itemprop="url">Блог</a>
+    </li>
+    <hr>
+    <li class="dropdown MobileMenuToggle" tabindex="0">
+        <a class="link-modal d-none" href="#modal-entrance">
+            <svg class="icon icon-user ">
+                <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#user"></use>
+            </svg>
+        </a>
+        {% if logged %}
+            <div class="dropdown-toggle">
+                <svg class="icon icon-user ">
+                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#user"></use>
+                </svg>
+                <span class="d-none d-xl-inline">Особистий кабінет</span>
+            </div>
+            <div class="dropdown-menu">
+                <div class="topLine__lk">
+                    <ul>
+                        <li><a href="{{ account }}">{{ text_account }}</a></li>
+                        <li><a href="{{ order }}">{{ text_order }}</a></li>
+                        <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
+                        <li><a href="{{ download }}">{{ text_download }}</a></li>
+                    </ul>
+                    <button data-href="{{ logout }}" class="topLine__exit ButtonLogout"  type="submit">
+                        {{ text_logout }}
+                    </button>
+                </div>
+            </div>
+        {% else %}
+            <div class="dropdown-toggle">
+                <svg class="icon icon-user ">
+                    <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#user"></use>
+                </svg>
+                <span class="d-none d-xl-inline">Особистий кабінет</span>
+            </div>
+            <div class="dropdown-menu">
+                <div class="topLine__lk">
+                    <ul>
+                        <li><a class=" btn btn btn-outline-dark" href="{{ register }}">{{ text_register }}</a></li>
+                        <li><a class="link-modal btn btn btn-outline-dark" href="#modal-reg" >{{ text_login }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    </li>
+
+
 </ul>

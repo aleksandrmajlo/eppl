@@ -1,5 +1,8 @@
 <?php
 namespace Cache;
+ini_set('log_errors', 'On');
+ini_set('display_errors', 'Off');
+ini_set('error_reporting', E_ALL );
 class File {
 	private $expire;
 
@@ -43,25 +46,21 @@ class File {
 
 	public function set($key, $value) {
 		$this->delete($key);
-
 		$file = DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.' . (time() + $this->expire);
-
 		$handle = fopen($file, 'w');
-
 		flock($handle, LOCK_EX);
-
 		fwrite($handle, json_encode($value));
-
 		fflush($handle);
-
 		flock($handle, LOCK_UN);
-
 		fclose($handle);
 	}
 
 	public function delete($key) {
-		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
+        ini_set('log_errors', 'On');
+        ini_set('display_errors', 'Off');
+        ini_set('error_reporting', E_ALL );
 
+		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
 		if ($files) {
 			foreach ($files as $file) {
 				if (file_exists($file)) {

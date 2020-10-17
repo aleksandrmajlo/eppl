@@ -32,12 +32,10 @@ class ControllerCommonCart extends Controller {
 			foreach ($results as $result) {
 				if ($this->config->get('total_' . $result['code'] . '_status')) {
 					$this->load->model('extension/total/' . $result['code']);
-
 					// We have to put the totals in an array so that they pass by reference.
 					$this->{'model_extension_total_' . $result['code']}->getTotal($total_data);
 				}
 			}
-
 			$sort_order = array();
 
 			foreach ($totals as $key => $value) {
@@ -51,10 +49,12 @@ class ControllerCommonCart extends Controller {
 
 		$this->load->model('tool/image');
 		$this->load->model('tool/upload');
+        $this->load->model('catalog/product');
 
 		$data['products'] = array();
 		foreach ($this->cart->getProducts() as $product) {
-			if ($product['image']) {
+
+		    if ($product['image']) {
 				$image = $this->model_tool_image->resize($product['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_height'));
 			} else {
 				$image = '';
@@ -85,13 +85,26 @@ class ControllerCommonCart extends Controller {
 			// Display prices
 			if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
 				$unit_price = $this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax'));
-				
 				$price = $this->currency->format($unit_price, $this->session->data['currency']);
 				$total = $this->currency->format($unit_price * $product['quantity'], $this->session->data['currency']);
 			} else {
 				$price = false;
 				$total = false;
 			}
+
+
+            $product_info = $this->model_catalog_product->getProduct($product['product_id']);
+
+            if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+                $oldPrice = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+            } else {
+                $oldPrice = false;
+            }
+            $oldPriceCart=false;
+            if($oldPrice&&$oldPrice!==$price){
+                $oldPriceCart=$oldPrice;
+            }
+
 
 			$data['products'][] = array(
 				'cart_id'   => $product['cart_id'],
@@ -101,7 +114,12 @@ class ControllerCommonCart extends Controller {
 				'option'    => $option_data,
 				'recurring' => ($product['recurring'] ? $product['recurring']['name'] : ''),
 				'quantity'  => $product['quantity'],
-				'price'     => $price,
+
+                'price'     => $price,
+                'oldPriceCart'=>$oldPriceCart,
+//                'special'     => $special,
+//                'tax'         => $tax,
+
 				'total'     => $total,
 				'href'      => $this->url->link('product/product', 'product_id=' . $product['product_id'])
 			);

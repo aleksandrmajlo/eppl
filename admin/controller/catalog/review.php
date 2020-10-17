@@ -403,6 +403,8 @@ class ControllerCatalogReview extends Controller {
 			$data['error_author'] = '';
 		}
 
+
+
 		if (isset($this->error['text'])) {
 			$data['error_text'] = $this->error['text'];
 		} else {
@@ -489,6 +491,11 @@ class ControllerCatalogReview extends Controller {
 			$data['product'] = '';
 		}
 
+
+
+
+
+
 		if (isset($this->request->post['author'])) {
 			$data['author'] = $this->request->post['author'];
 		} elseif (!empty($review_info)) {
@@ -496,6 +503,8 @@ class ControllerCatalogReview extends Controller {
 		} else {
 			$data['author'] = '';
 		}
+
+
 
 		if (isset($this->request->post['text'])) {
 			$data['text'] = $this->request->post['text'];
@@ -544,6 +553,10 @@ class ControllerCatalogReview extends Controller {
 		if (!$this->request->post['product_id']) {
 			$this->error['product'] = $this->language->get('error_product');
 		}
+
+        if (($this->request->post['email'] =="") || !filter_var($this->request->post['email'] , FILTER_VALIDATE_EMAIL)) {
+            $this->error['email']= 'Вкажіть email';
+        }
 
 		if ((utf8_strlen($this->request->post['author']) < 3) || (utf8_strlen($this->request->post['author']) > 64)) {
 			$this->error['author'] = $this->language->get('error_author');

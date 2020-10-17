@@ -290,7 +290,6 @@ class ControllerProductProduct extends Controller
 			} else {
 				$data['price'] = false;
 			}
-
 			if ((float)$product_info['special']) {
 				$data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
 			} else {
@@ -389,8 +388,9 @@ class ControllerProductProduct extends Controller
 			$data['products'] = array();
 
 
-           //**********************************************
-            $data['Colir_Array']=['colir'=>[],'array'=>[]];
+          //**********************************************
+            // данные самого товара start
+            $data['Colir_Array']=['colir'=>[],'array'=>[],'size'=>[]];
             $product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id = ag.attribute_group_id) LEFT JOIN " . DB_PREFIX . "attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$this->request->get['product_id'] . "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
             foreach ($product_attribute_group_query->rows as $product_attribute_group) {
                 if($product_attribute_group["attribute_group_id"]=="1"){
@@ -399,17 +399,28 @@ class ControllerProductProduct extends Controller
                         if($product_attribute['attribute_id']=="11"){
                             $data['Colir_Array']['colir']=$product_attribute["text"];
                         }
+
                         if($product_attribute['attribute_id']=="12"){
                             $data['Colir_Array']['array'][]=[
                                 'array'=>$product_attribute["text"],
                                 'href'=>false,
                                 "number"=>(int)$product_attribute["text"]
                             ];
-
                         }
+
+                        if($product_attribute['attribute_id']=="13"){
+                            $data['Colir_Array']['size'][]=[
+                                'array'=>$product_attribute["text"],
+                                'href'=>false,
+                                "number"=>(int)$product_attribute["text"]
+                            ];
+                        }
+
+
                     }
                 }
             }
+            // данные самого товара end
 
             $results = $this->model_catalog_product->getProductRelatedColor($this->request->get['product_id']);
             $data['color_products']=[];
@@ -428,6 +439,7 @@ class ControllerProductProduct extends Controller
                 ];
             }
 
+            // размер накопителя start
             $results = $this->model_catalog_product->getProductRelatedArray($this->request->get['product_id']);
             $data['array_products']=[];
             foreach ($results as $result){
@@ -451,7 +463,70 @@ class ControllerProductProduct extends Controller
             $resulArrayColumn = array_column($resulArray, 'number');
             array_multisort($resulArrayColumn, SORT_ASC, $resulArray);
             $data['resulArray']=$resulArray;
+            // размер накопителя  end
 
+            // размер  start
+            $results = $this->model_catalog_product->getProductRelatedSize($this->request->get['product_id']);
+
+
+            $data['size_products']=[];
+            foreach ($results as $result){
+                $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$result['product_id'] . "' AND a.attribute_group_id = '" . 1 . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                $array="";
+                foreach ($product_attribute_query->rows as $product_attribute) {
+                    if($product_attribute['attribute_id']=="13"){
+                        $array=$product_attribute["text"];
+                        break;
+                    }
+                }
+                $data['size_products'][]=[
+                    "array"=>$array,
+                    'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id']),
+                    "number"=>(int)$array
+                ];
+            }
+
+            $resulSize = array_merge($data['Colir_Array']['size'], $data['size_products']);
+            $resulSizeColumn = array_column($resulSize, 'number');
+            array_multisort($resulSizeColumn, SORT_ASC, $resulSize);
+            $data['resulSize']=$resulSize;
+            // размер накопителя  end
+
+            // Рекомендую для покупок
+            $buys = $this->model_catalog_product->getProductRelatedBuy($this->request->get['product_id']);
+
+            $data['buys']=[];
+            if($buys){
+                foreach ($buys as $result){
+
+                    if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+                        $price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+                    } else {
+                        $price = false;
+                    }
+                    if ((float)$result['special']) {
+                        $special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+                    } else {
+                        $special = false;
+                    }
+
+                    if ($this->config->get('config_tax')) {
+                        $tax = $this->currency->format((float)$result['special'] ? $result['special'] : $result['price'], $this->session->data['currency']);
+                    } else {
+                        $tax = false;
+                    }
+
+
+                    $data['buys'][] = array(
+                        'product_id'  => $result['product_id'],
+                        'name'        => $result['name'],
+                        'price'       => $price,
+                        'special'     => $special,
+                        'tax'         => $tax,
+                        'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
+                    );
+                }
+            }
             $data['cartLink'] = $this->url->link('checkout/cart');
             //********************************************************
 
@@ -627,6 +702,7 @@ class ControllerProductProduct extends Controller
 
 		foreach ($results as $result) {
 			$data['reviews'][] = array(
+'email'     => $result['email'],
 				'author'     => $result['author'],
 				'text'       => nl2br($result['text']),
 				'rating'     => (int)$result['rating'],
@@ -662,6 +738,11 @@ class ControllerProductProduct extends Controller
 				$json['error'] = $this->language->get('error_text');
 			}
 
+
+                if (($this->request->post['email'] =="") || !filter_var($this->request->post['email'] , FILTER_VALIDATE_EMAIL)) {
+                   $json['error'] = 'Вкажіть email';
+               }
+            
 			if (empty($this->request->post['rating']) || $this->request->post['rating'] < 0 || $this->request->post['rating'] > 5) {
 				$json['error'] = $this->language->get('error_rating');
 			}

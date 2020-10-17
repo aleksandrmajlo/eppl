@@ -90,8 +90,7 @@
 {% endfor %}
 
 <script src="catalog/view/theme/eppl/js/lazy.js"></script>
-<script src="catalog/view/theme/eppl/libs/@fancyapps/fancybox/jquery.fancybox.min.js"></script>
-<script src="catalog/view/theme/eppl/libs/swiper/js/swiper.min.js"></script>
+
 <script src="catalog/view/theme/eppl/libs/ion-rangeslider/js/ion.rangeSlider.min.js"></script>
 <script src="catalog/view/theme/eppl/libs/inputmask/inputmask.min.js"></script>
 <script src="catalog/view/theme/eppl/js/common.js"></script>
@@ -123,32 +122,33 @@
 
 <div class="modal-win" id="modal-reg" style="display: none">
     <div class="modal-win__row row">
-        <div class="modal-win__col col-md-12 d-none d-md-block" style="border:none">
+        <div class="modal-win__col col-md-12  d-md-block" style="border:none">
             <div class="form-wrap">
                 <form method="post" action="/index.php?route=account/login" enctype="multipart/form-data">
                     <input type="hidden" name="example-input-field"/>
-                    <div class="form-wrap__title form-data">У мене вже є аккаунт
-                        <a class="form-wrap__link d-md-none" href="/index.php?route=account/forgotten"">Забули
-                        пароль?</a>
+                    <div class="form-wrap__title form-data">
+                        У мене вже є аккаунт
+                        <a class="form-wrap__link d-md-none" href="/index.php?route=account/forgotten"">
+                             Забули пароль?
+                        </a>
                     </div>
                     <div class="row align-items-center">
-                        <div class="col-9 col-sm-6">
+                        <div class="col-12 col-sm-6">
                             <div class="form-wrap__input-wrap form-group">
                                 <input class="form-wrap__input form-control" type="email" placeholder="Ваш e-mail"
                                        name="email" required="required"/>
                             </div>
                         </div>
-                        <div class="col-9 col-sm-6">
+                        <div class="col-12 col-sm-6">
                             <div class="form-wrap__input-wrap form-group">
                                 <input class="form-wrap__input form-control" type="password" placeholder="Пароль"
                                        name="password" required="required"/>
                             </div>
                         </div>
-                        <div class="form-wrap__col col-sm-6">
-                            <button class="form-wrap__btn btn btn-success" type="submit">Війти
-                            </button>
+                        <div class="form-wrap__col col-12  col-sm-6">
+                            <button class="form-wrap__btn btn btn-success" type="submit">Війти </button>
                         </div>
-                        <div class="form-wrap__col col-sm-6">
+                        <div class="form-wrap__col col-12 col-sm-6">
                             <a class="form-wrap__link d-none d-md-block" href="/index.php?route=account/forgotten">Забули
                                 пароль?</a>
                         </div>
@@ -161,7 +161,8 @@
             </div>
         </div>
 
-        <div class="col-md-6 d-none ">
+{#
+    <div class="col-md-6 d-none ">
 
             <div class="form-wrap" id="simpleRegister">
 
@@ -224,7 +225,10 @@
 
             </div>
         </div>
+#}
+
     </div>
+{#
     <div class="modal-win__polite d-none ">
         <label class="custom-input">
             <input class="custom-input__input" type="checkbox" name="checkbox" checked="checked"/>
@@ -234,6 +238,9 @@
             </small>
         </label>
     </div>
+
+#}
+
 </div>
 {#<script>#}
 {#    $('#simpleRegister').load('index.php?route=account/simpleregister #simple-content');#}

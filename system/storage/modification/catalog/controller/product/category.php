@@ -167,7 +167,6 @@ class ControllerProductCategory extends Controller {
 				$data['categories'][] = array(
 
                     'thumd'=>$image,
-
 	             
 					'name' => $result['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
 					'href' => $this->url->link('product/category', 'path=' . $this->request->get['path'] . '_' . $result['category_id'] . $url),
@@ -230,7 +229,10 @@ class ControllerProductCategory extends Controller {
 
 
                  //*********************************************************
-                $Colir_Array=['color'=>[],'array'=>[]];
+                $data['cartLink'] = $this->url->link('checkout/cart');
+
+				// сам продукт параметры
+                $Colir_Array=['color'=>[],'array'=>[],'size'=>[]];
                 $product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id = ag.attribute_group_id) LEFT JOIN " . DB_PREFIX . "attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$result['product_id'] . "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
                 foreach ($product_attribute_group_query->rows as $product_attribute_group) {
                     if($product_attribute_group["attribute_group_id"]=="1"){
@@ -239,6 +241,7 @@ class ControllerProductCategory extends Controller {
                             if($product_attribute['attribute_id']=="11"){
                                 $Colir_Array['color']=$product_attribute["text"];
                             }
+
                             if($product_attribute['attribute_id']=="12"){
                                 $Colir_Array['array'][] =[
                                     'array'=>$product_attribute["text"],
@@ -246,10 +249,20 @@ class ControllerProductCategory extends Controller {
                                     'number'=>(int)$product_attribute["text"]
                                 ];
                             }
+
+                            if($product_attribute['attribute_id']=="13"){
+                                $Colir_Array['size'][] =[
+                                    'array'=>$product_attribute["text"],
+                                    'href'=>false,
+                                    'number'=>(int)$product_attribute["text"]
+                                ];
+                            }
+
                         }
                     }
                 }
 
+                // по цвету старт
                 $Tresults = $this->model_catalog_product->getProductRelatedColor($result['product_id']);
                 $color_products=[];
                 foreach ($Tresults as $Tresult){
@@ -266,7 +279,10 @@ class ControllerProductCategory extends Controller {
                         'href'        => $this->url->link('product/product', 'product_id=' . $Tresult['product_id'])
                     ];
                 }
+                // по цвету end
 
+
+                // по накопителю start
                 $Tresults = $this->model_catalog_product->getProductRelatedArray($result['product_id']);
                 $array_products=[];
                 foreach ($Tresults as $Tresult){
@@ -288,21 +304,51 @@ class ControllerProductCategory extends Controller {
                 $resulArray = array_merge($Colir_Array['array'], $array_products);
                 $resulArrayColumn = array_column($resulArray, 'number');
                 array_multisort($resulArrayColumn, SORT_ASC, $resulArray);
+                // по накопителю end
+
+                // по размеру start
+                $Tresults = $this->model_catalog_product->getProductRelatedSize($result['product_id']);
+                $size_products=[];
+                foreach ($Tresults as $Tresult){
+                    $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$Tresult['product_id'] . "' AND a.attribute_group_id = '" . 1 . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                    $array="";
+                    foreach ($product_attribute_query->rows as $product_attribute) {
+                        if($product_attribute['attribute_id']=="13"){
+                            $array=$product_attribute["text"];
+                            break;
+                        }
+                    }
+                    $size_products[] = [
+                        "array" => $array,
+                        'href' => $this->url->link('product/product', 'product_id=' . $Tresult['product_id']),
+                        'number'=>(int)$array,
+
+                    ];
+                }
+                $resulSize = array_merge($Colir_Array['size'], $size_products);
+                $resulSizeColumn = array_column($resulSize, 'number');
+                array_multisort($resulSizeColumn, SORT_ASC, $resulSize);
+                // по размеру end
+
+
                 //*********************************************************
 	             
 				$data['products'][] = array(
 					'product_id'  => $result['product_id'],
 
-                                         'array_products' => $resulArray,
+                    'size_products' => $resulSize,
+                    'array_products' => $resulArray,
                     'color_products'=>$color_products,
                     'Colir_Array'=>$Colir_Array,
 	             
 					'thumb'       => $image,
 					'name'        => $result['name'],
 					'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',
-					'price'       => $price,
+
+                    'price'       => $price,
 					'special'     => $special,
 					'tax'         => $tax,
+
 					'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
 					'rating'      => $result['rating'],
 					'href'        => $this->url->link('product/product', 'path=' . $this->request->get['path'] . '&product_id=' . $result['product_id'] . $url)

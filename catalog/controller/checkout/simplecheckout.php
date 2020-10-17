@@ -4,9 +4,9 @@
 @link   http://www.simpleopencart.com
 */
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include_once(DIR_SYSTEM . 'library/simple/simple_controller.php');
 
@@ -16,12 +16,14 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
     public function index($args = null) {
 
 
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
+
         $this->loadLibrary('simple/simplecheckout');
 
-
-
         $settingsGroup = !empty($args['group']) ? $args['group'] : (!empty($this->request->get['group']) ? $this->request->get['group'] : $this->config->get('simple_default_checkout_group'));
-
 
 
         $this->simplecheckout = SimpleCheckout::getInstance($this->registry, $settingsGroup);

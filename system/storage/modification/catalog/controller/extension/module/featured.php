@@ -53,12 +53,8 @@ class ControllerExtensionModuleFeatured extends Controller {
 
 
 
-
-
-
-
-                                      //*********************************************************
-                    $Colir_Array=['color'=>[],'array'=>[]];
+                    //*********************************************************
+                    $Colir_Array=['color'=>[],'array'=>[],'size'=>[]];
                     $product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id = ag.attribute_group_id) LEFT JOIN " . DB_PREFIX . "attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$product_id . "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
                     foreach ($product_attribute_group_query->rows as $product_attribute_group) {
                         if($product_attribute_group["attribute_group_id"]=="1"){
@@ -67,6 +63,7 @@ class ControllerExtensionModuleFeatured extends Controller {
                                 if($product_attribute['attribute_id']=="11"){
                                     $Colir_Array['color']=$product_attribute["text"];
                                 }
+
                                 if($product_attribute['attribute_id']=="12"){
                                     $Colir_Array['array'][] =[
                                         'array'=>$product_attribute["text"],
@@ -74,6 +71,15 @@ class ControllerExtensionModuleFeatured extends Controller {
                                         'number'=>(int)$product_attribute["text"]
                                     ];
                                 }
+
+                                if($product_attribute['attribute_id']=="13"){
+                                    $Colir_Array['size'][] =[
+                                        'array'=>$product_attribute["text"],
+                                        'href'=>false,
+                                        'number'=>(int)$product_attribute["text"]
+                                    ];
+                                }
+
                             }
                         }
                     }
@@ -118,20 +124,40 @@ class ControllerExtensionModuleFeatured extends Controller {
                     $resulArrayColumn = array_column($resulArray, 'number');
                     array_multisort($resulArrayColumn, SORT_ASC, $resulArray);
 
-                    //*********************************************************
+                    // размер
+                    $Tresults = $this->model_catalog_product->getProductRelatedSize($product_id);
+                    $size_products=[];
+                    foreach ($Tresults as $Tresult){
+                        $product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$Tresult['product_id'] . "' AND a.attribute_group_id = '" . 1 . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+                        $array="";
+                        foreach ($product_attribute_query->rows as $product_attribute) {
+                            if($product_attribute['attribute_id']=="13"){
+                                $array=$product_attribute["text"];
+                                break;
+                            }
+                        }
+                        $size_products[] = [
+                            "array" => $array,
+                            'href' => $this->url->link('product/product', 'product_id=' . $Tresult['product_id']),
+                            'number'=>(int)$array,
 
+                        ];
+                    }
+                    $resulSize = array_merge($Colir_Array['size'], $size_products);
+                    $resulSizeColumn = array_column($resulSize, 'number');
+                    array_multisort($resulSizeColumn, SORT_ASC, $resulSize);
+
+                    //*********************************************************
 
 	             
 					$data['products'][] = array(
 						'product_id'  => $product_info['product_id'],
 
-                        'array_products' => $resulArray,
+                    'size_products' => $resulSize,
+                    'array_products' => $resulArray,
                     'color_products'=>$color_products,
                     'Colir_Array'=>$Colir_Array,
 	             
-
-
-
 						'thumb'       => $image,
 						'name'        => $product_info['name'],
 						'description' => utf8_substr(strip_tags(html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',
@@ -139,6 +165,7 @@ class ControllerExtensionModuleFeatured extends Controller {
 						'special'     => $special,
 						'tax'         => $tax,
 						'rating'      => $rating,
+                        'minimum'     => $product_info['minimum'] > 0 ? $product_info['minimum'] : 1,
 						'href'        => $this->url->link('product/product', 'product_id=' . $product_info['product_id'])
 					);
 				}

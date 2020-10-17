@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-    $('#ButtonLogout').click(function(event) {
+    $('.ButtonLogout').click(function(event) {
         event.preventDefault();
         var href = $(this).data('href');
         location = href;

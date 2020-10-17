@@ -6,8 +6,11 @@ $_['date_format_short'] = 'd.m.Y';
 $_['date_format_long'] = 'l, d F Y';
 $_['time_format'] = 'H:i:s';
 $_['datetime_format'] = 'd/m/Y H:i:s';
-$_['decimal_point'] = '.';
-$_['thousand_point'] = '';
+//$_['decimal_point'] = '.';
+//$_['thousand_point'] = '';
+
+$_['decimal_point']         = '.';
+$_['thousand_point']        = ' ';
 
 // Text
 $_['text_home'] = '<svg class="icon icon-home "><use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#home"></use></svg>';

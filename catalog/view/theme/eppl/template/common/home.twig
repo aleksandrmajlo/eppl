@@ -96,4 +96,45 @@
 {{ column_left }}
 {{ column_right }}
 {{ content_bottom }}
+
+<div class="modal-win" id="modal-basket" style="display: none">
+    <div class="modal-win__title text-center">
+        Додано в кошик
+    </div>
+    <div class="modal-win__youOrder">
+        <div class="row" id="CartPopup">
+        </div>
+    </div>
+    <div class="modal-win__links">
+        <button class="modal-win__proceed" type="button" data-fancybox-close="" title="Закрыть">
+            Продовжити покупки
+        </button>
+        <a class="modal-win__toBasket" href="{{ cartLink }}">Перейти в корзину</a>
+    </div>
+    <section class="sBuyWith section d-none d-lg-block" id="sBuyWith">
+        <div class="container">
+            <div class="section-title text-center">
+                <h2>Разом з цим товаром купують</h2>
+            </div>
+            <div class="sBuyWith__slider" id="CartSliderWrapCat">
+                <div class="swiper-container buy-with-slider-js buy-with-slider-js" id="CartSliderCat">
+                    <div class="swiper-wrapper" id="RealetedCategory">
+                    </div>
+                </div>
+                <div class="swiper-prev-frame buy-with-prev buy-with-prev">
+                    <svg class="icon icon-chevron-left ">
+                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-left"></use>
+                    </svg>
+                </div>
+                <div class="swiper-next-frame buy-with-next buy-with-next ">
+                    <svg class="icon icon-chevron-right ">
+                        <use xlink:href="/catalog/view/theme/eppl/img/svg/sprite.svg#chevron-right"></use>
+                    </svg>
+                </div>
+                <div class="swiper-pugin-frame buy-with-pugin d-md-none"></div>
+            </div>
+        </div>
+    </section>
+</div>
+
 {{ footer }}

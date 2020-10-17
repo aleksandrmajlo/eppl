@@ -488,6 +488,46 @@
               </div>
 {#              По накопичувачу *********************************************************#}
 
+{#              по размеру *********************************************************#}
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-related">
+                  <span data-toggle="tooltip" title="По розміру">По розмір</span>
+                </label>
+                <div class="col-sm-10">
+                  <input type="text" name="related_size" value="" placeholder="По розміру" id="input-related_size" class="form-control"/>
+                  <div id="product-related_size" class="well well-sm" style="height: 150px; overflow: auto;">
+                    {% for product_related in product_relateds_size %}
+                      <div id="product-related_size{{ product_related.product_id }}">
+                        <i class="fa fa-minus-circle"></i>
+                          {{ product_related.name }}
+                        <input type="hidden" name="product_related_size[]" value="{{ product_related.product_id }}"/>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+{#              по размеру *********************************************************#}
+
+{#             Рекомендую для покупок *********************************************************#}
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-related">
+                  <span data-toggle="tooltip" title="По розміру">Рекомендую для покупок</span>
+                </label>
+                <div class="col-sm-10">
+                  <input type="text" name="related_buy" value="" placeholder="Рекомендую для покупок" id="input-related_buy" class="form-control"/>
+                  <div id="product-related_buy" class="well well-sm" style="height: 150px; overflow: auto;">
+                    {% for product_related in product_relateds_buy %}
+                      <div id="product-related_size{{ product_related.product_id }}">
+                        <i class="fa fa-minus-circle"></i>
+                          {{ product_related.name }}
+                        <input type="hidden" name="product_related_buy[]" value="{{ product_related.product_id }}"/>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+{#            Рекомендую для покупок *********************************************************#}
+
 
             </div>
             <div class="tab-pane" id="tab-attribute">
@@ -1372,6 +1412,60 @@
   });
 
   $('#product-related_array').delegate('.fa-minus-circle', 'click', function() {
+	  $(this).parent().remove();
+  });
+
+  // size !!!!!!!!!!!!!!!
+  $('input[name=\'related_size\']').autocomplete({
+	  'source': function(request, response) {
+		  $.ajax({
+			  url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+			  dataType: 'json',
+			  success: function(json) {
+				  response($.map(json, function(item) {
+					  return {
+						  label: item['name'],
+						  value: item['product_id']
+					  }
+				  }));
+			  }
+		  });
+	  },
+	  'select': function(item) {
+		  $('input[name=\'related_size\']').val('');
+		  $('#product-related_size' + item['value']).remove();
+		  $('#product-related_size').append('<div id="product-related_size' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_related_size[]" value="' + item['value'] + '" /></div>');
+	  }
+  });
+
+  $('#product-related_size').delegate('.fa-minus-circle', 'click', function() {
+	  $(this).parent().remove();
+  });
+
+  // size !!!!!!!!!!!!!!!
+  $('input[name=\'related_buy\']').autocomplete({
+	  'source': function(request, response) {
+		  $.ajax({
+			  url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+			  dataType: 'json',
+			  success: function(json) {
+				  response($.map(json, function(item) {
+					  return {
+						  label: item['name'],
+						  value: item['product_id']
+					  }
+				  }));
+			  }
+		  });
+	  },
+	  'select': function(item) {
+		  $('input[name=\'related_buy\']').val('');
+		  $('#product-related_buy' + item['value']).remove();
+		  $('#product-related_buy').append('<div id="product-related_buy' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_related_buy[]" value="' + item['value'] + '" /></div>');
+	  }
+  });
+
+  $('#product-related_buy').delegate('.fa-minus-circle', 'click', function() {
 	  $(this).parent().remove();
   });
 

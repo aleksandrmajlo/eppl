@@ -1,0 +1,19 @@
+{% if products %}
+    {% for product in products %}
+        <div class="swiper-slide">
+            <a class="sBuyWith__slide-cont" href="{{ product['href'] }}">
+                {% if product['thumb'] %}
+                    <span class="sBuyWith__img">
+				       <picture>
+                            <img class="" src="{{ product['thumb'] }}" alt="{{ product['name'] }}"/>
+						</picture>
+                  </span>
+                {% endif %}
+                <span class="sBuyWith__txt">
+                       <span class="sBuyWith__name">{{ product['name'] }}</span>
+                       <span class="sBuyWith__price">{{ product['price'] }}</span>
+                </span>
+            </a>
+        </div>
+    {% endfor %}
+{% endif %}

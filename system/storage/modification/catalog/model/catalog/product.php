@@ -447,6 +447,30 @@ class ModelCatalogProduct extends Model {
 
 		return $product_data;
 	}
+
+
+	    public function getProductRelatedSize($product_id) {
+        $product_data = array();
+
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_related_size pr LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = '" . (int)$product_id . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'");
+
+        foreach ($query->rows as $result) {
+            $product_data[$result['related_id']] = $this->getProduct($result['related_id']);
+        }
+        return $product_data;
+    }
+
+    public function getProductRelatedBuy($product_id) {
+        $product_data = array();
+
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_related_buy pr LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = '" . (int)$product_id . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'");
+
+        foreach ($query->rows as $result) {
+            $product_data[$result['related_id']] = $this->getProduct($result['related_id']);
+        }
+        return $product_data;
+    }
+
 	             
 	public function getProductLayoutId($product_id) {
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_to_layout WHERE product_id = '" . (int)$product_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
